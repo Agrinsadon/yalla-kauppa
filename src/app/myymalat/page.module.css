@@ -1,0 +1,75 @@
+.container {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+}
+
+.hero {
+  background: linear-gradient(135deg, #e30613 0%, #c90510 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.95;
+}
+
+.storesSection {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.storesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* Tablet responsiveness */
+@media (max-width: 968px) {
+  .storesGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .storesSection {
+    padding: 2rem 1rem;
+  }
+
+  .storesGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+

@@ -32,7 +32,7 @@ export default function Hero() {
           <div className={styles.imageSection}>
             <div className={styles.imageWrapper}>
               <Image
-                src="/yalla.png"
+                src="/landingpage.png"
                 alt="Yalla Kaupan tuotteita"
                 width={600}
                 height={600}

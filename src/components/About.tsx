@@ -1,0 +1,79 @@
+'use client';
+
+import { BadgeCheck, ChefHat, Salad, Users } from 'lucide-react';
+import styles from './About.module.css';
+
+export default function About() {
+  const stats = [
+    { 
+      value: '2016', 
+      label: 'Perustettu',
+    },
+    { 
+      value: '5', 
+      label: 'Myymälää',
+    },
+    { 
+      value: '1000+', 
+      label: 'Tuotetta',
+    },
+  ];
+
+  const features = [
+    {
+      icon: <BadgeCheck size={40} />,
+      title: 'Halal Tuotteet',
+      description: 'Laaja valikoima sertifioituja halal-tuotteita',
+    },
+    {
+      icon: <ChefHat size={40} />,
+      title: 'Tuoreet Leivät',
+      description: 'Päivittäin tuoreet leivät kaikkiin myymäliin',
+    },
+    {
+      icon: <Salad size={40} />,
+      title: 'Tuoreet Vihannekset',
+      description: 'Valikoimassamme on päivittäin tuoreita vihanneksia ja hedelmiä',
+    },
+    {
+      icon: <Users size={40} />,
+      title: 'Perheyritys',
+      description: 'Yalla on perheyritys, joka jakaa arvoja ja rakastaa asiakkaitaan',
+    },
+  ];
+
+  return (
+    <section className={styles.about}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Meistä</h2>
+          <p className={styles.subtitle}>
+            Yalla on perheyritys, joka aloitti toimintansa vuonna 2016. 
+            Olemme kasvaneet luotettavaksi ruokakaupaksi, joka tarjoaa laadukkaita 
+            tuotteita ja erinomaista asiakaspalvelua.
+          </p>
+        </div>
+
+        <div className={styles.stats}>
+          {stats.map((stat, index) => (
+            <div key={index} className={styles.statItem}>
+              <div className={styles.statValue}>{stat.value}</div>
+              <div className={styles.statLabel}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.features}>
+          {features.map((feature, index) => (
+            <div key={index} className={styles.featureCard}>
+              <div className={styles.featureIcon}>{feature.icon}</div>
+              <h3 className={styles.featureTitle}>{feature.title}</h3>
+              <p className={styles.featureDescription}>{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+

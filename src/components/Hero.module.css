@@ -95,22 +95,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  object-fit: cover;
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  height: 550px;
   aspect-ratio: 1;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .heroImage {
-  object-fit: contain;
-  width: 100%;
+  object-fit: cover;
   height: 100%;
+
 }
 
 /* Tablet responsiveness */

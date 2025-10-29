@@ -29,15 +29,12 @@ export default function Navbar() {
               <Link href="/tarjoukset">Tarjoukset</Link>
             </li>
             <li>
-              <Link href="/meista">Meistä</Link>
-            </li>
-            <li>
               <Link href="/yhteystiedot">Yhteystiedot</Link>
             </li>
           </ul>
           <div className={styles.socialLinks}>
             <a 
-              href="https://facebook.com" 
+              href="https://www.facebook.com/yalla.fi" 
               target="_blank" 
               rel="noopener noreferrer"
               className={styles.socialIcon}
@@ -48,7 +45,7 @@ export default function Navbar() {
               </svg>
             </a>
             <a 
-              href="https://instagram.com" 
+              href="https://www.instagram.com/yalla.fi/" 
               target="_blank" 
               rel="noopener noreferrer"
               className={styles.socialIcon}
