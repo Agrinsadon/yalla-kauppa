@@ -2,13 +2,18 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.container}>
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo} onClick={closeMenu}>
           <Image
             src="/yalla.png"
             alt="Yalla Logo"
@@ -17,25 +22,39 @@ export default function Navbar() {
             priority
           />
         </Link>
-        <div className={styles.navRight}>
-          <ul className={styles.navLinks}>
+        <button
+          className={`${styles.menuToggle} ${menuOpen ? styles.menuToggleActive : ''}`}
+          type="button"
+          aria-label="Avaa navigaatio"
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <div
+          className={`${styles.navRight} ${menuOpen ? styles.navRightOpen : ''}`}
+        >
+          <ul id="primary-navigation" className={styles.navLinks}>
             <li>
-              <Link href="/">Koti</Link>
+              <Link href="/" onClick={closeMenu}>Koti</Link>
             </li>
             <li>
-              <Link href="/myymalat">Myymälät</Link>
+              <Link href="/myymalat" onClick={closeMenu}>Myymälät</Link>
             </li>
             <li>
-              <Link href="/tarjoukset">Tarjoukset</Link>
+              <Link href="/tarjoukset" onClick={closeMenu}>Tarjoukset</Link>
             </li>
             <li>
-              <Link href="/yhteystiedot">Yhteystiedot</Link>
+              <Link href="/yhteystiedot" onClick={closeMenu}>Yhteystiedot</Link>
             </li>
           </ul>
           <div className={styles.socialLinks}>
-            <a 
-              href="https://www.facebook.com/yalla.fi" 
-              target="_blank" 
+            <a
+              href="https://www.facebook.com/yalla.fi"
+              target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIcon}
               aria-label="Facebook"
@@ -44,9 +63,9 @@ export default function Navbar() {
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/>
               </svg>
             </a>
-            <a 
-              href="https://www.instagram.com/yalla.fi/" 
-              target="_blank" 
+            <a
+              href="https://www.instagram.com/yalla.fi/"
+              target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIcon}
               aria-label="Instagram"
@@ -61,4 +80,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

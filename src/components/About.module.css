@@ -168,6 +168,7 @@
 
   .header {
     margin-bottom: 0;
+    text-align: left;
   }
 
   .title {
@@ -180,12 +181,14 @@
 
   .stats {
     flex-direction: row;
-    justify-content: space-around;
-    padding-left: 0;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    gap: 1.75rem;
+    padding: 1.5rem 0 0;
     border-left: none;
     border-top: 3px solid #e30613;
+  }
+
+  .statItem {
+    text-align: left;
   }
 
   .statValue {
@@ -198,21 +201,45 @@
 
   .features {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
   .featureCard {
     padding: 1.5rem;
-    flex-direction: column;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
   }
 
   .featureContent {
-    text-align: center;
+    text-align: left;
   }
 
   .featureIcon {
-    margin: 0 auto;
+    margin: 0;
   }
 }
 
+@media (max-width: 480px) {
+  .about {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .stats {
+    gap: 1.5rem;
+  }
+
+  .featureCard {
+    padding: 1.25rem;
+  }
+}

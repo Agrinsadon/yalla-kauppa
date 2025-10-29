@@ -15,6 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .logo {
@@ -103,32 +104,90 @@
   height: 20px;
 }
 
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 27px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.menuToggle span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menuToggleActive span:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.menuToggleActive span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuToggleActive span:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .container {
-    padding: 1rem;
-    flex-direction: column;
-    gap: 1rem;
+    padding: 0.65rem 1rem;
   }
 
-  .navRight {
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
+  .menuToggle {
+    display: flex;
   }
 
   .navLinks {
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 1.25rem;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
   }
 
   .navLinks a {
-    font-size: 0.9rem;
+    font-size: 1.05rem;
   }
 
   .socialLinks {
     justify-content: center;
   }
-}
 
+  .navRight {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(227, 6, 19, 0.97);
+    padding: 1.5rem 1rem 2rem;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .navRightOpen {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .logo {
+  max-width: 60px;
+  height: 40px;
+}
+}
