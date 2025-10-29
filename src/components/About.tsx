@@ -45,30 +45,34 @@ export default function About() {
   return (
     <section className={styles.about}>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Meistä</h2>
-          <p className={styles.subtitle}>
-            Yalla on perheyritys, joka aloitti toimintansa vuonna 2016. 
-            Olemme kasvaneet luotettavaksi ruokakaupaksi, joka tarjoaa laadukkaita 
-            tuotteita ja erinomaista asiakaspalvelua.
-          </p>
-        </div>
+        <div className={styles.topSection}>
+          <div className={styles.header}>
+            <h2 className={styles.title}>Meistä</h2>
+            <p className={styles.subtitle}>
+              Yalla on perheyritys, joka aloitti toimintansa vuonna 2016. 
+              Olemme kasvaneet luotettavaksi ruokakaupaksi, joka tarjoaa laadukkaita 
+              tuotteita ja erinomaista asiakaspalvelua.
+            </p>
+          </div>
 
-        <div className={styles.stats}>
-          {stats.map((stat, index) => (
-            <div key={index} className={styles.statItem}>
-              <div className={styles.statValue}>{stat.value}</div>
-              <div className={styles.statLabel}>{stat.label}</div>
-            </div>
-          ))}
+          <div className={styles.stats}>
+            {stats.map((stat, index) => (
+              <div key={index} className={styles.statItem}>
+                <div className={styles.statValue}>{stat.value}</div>
+                <div className={styles.statLabel}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className={styles.features}>
           {features.map((feature, index) => (
             <div key={index} className={styles.featureCard}>
               <div className={styles.featureIcon}>{feature.icon}</div>
-              <h3 className={styles.featureTitle}>{feature.title}</h3>
-              <p className={styles.featureDescription}>{feature.description}</p>
+              <div className={styles.featureContent}>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDescription}>{feature.description}</p>
+              </div>
             </div>
           ))}
         </div>

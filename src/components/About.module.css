@@ -8,9 +8,16 @@
   margin: 0 auto;
 }
 
-.header {
-  text-align: center;
+.topSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
   margin-bottom: 4rem;
+  align-items: start;
+}
+
+.header {
+  text-align: left;
 }
 
 .title {
@@ -24,38 +31,37 @@
   font-size: 1.125rem;
   line-height: 1.7;
   color: #4b5563;
-  max-width: 700px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-  margin-bottom: 5rem;
-  padding: 3rem 0;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  gap: 5rem;
+  padding-left: 2rem;
+  flex-direction: row;
+  border-left: 3px solid #e30613;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .statItem {
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: 0.25rem;
 }
 
 .statValue {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 800;
   color: #e30613;
-    margin: 0;
+  margin: 0;
   line-height: 1;
 }
 
 .statLabel {
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #6b7280;
   text-transform: uppercase;
@@ -70,63 +76,50 @@
 }
 
 .featureCard {
-  background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
-  border-radius: 16px;
-  padding: 2.5rem;
-  text-align: center;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  display: block;
+  gap: 1.5rem;
   transition: all 0.3s ease;
-  border: 2px solid #f0f0f0;
+  border: 1px solid #f0f0f0;
   position: relative;
-  overflow: hidden;
-}
-
-.featureCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #e30613 0%, #c90510 100%);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.featureCard:hover::before {
-  transform: scaleX(1);
 }
 
 .featureCard:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   border-color: #e30613;
-  background: #ffffff;
 }
 
 .featureIcon {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 50px;
+  height: 50px;
   background: linear-gradient(135deg, #e30613 0%, #c90510 100%);
-  border-radius: 18px;
+  border-radius: 12px;
   color: #ffffff;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 12px rgba(227, 6, 19, 0.25);
+  flex-shrink: 0;
+  margin-bottom: 1rem;
   transition: all 0.3s ease;
 }
 
 .featureCard:hover .featureIcon {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 6px 20px rgba(227, 6, 19, 0.35);
+  transform: scale(1.05);
+}
+
+.featureContent {
+  flex: 1;
+  text-align: left;
 }
 
 .featureTitle {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #1f2937;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .featureDescription {
@@ -138,13 +131,23 @@
 
 /* Tablet responsiveness */
 @media (max-width: 968px) {
+  .topSection {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
   .stats {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 0;
+    border-left: none;
+    border-top: 3px solid #e30613;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
   }
 
   .statValue {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .features {
@@ -158,8 +161,13 @@
     padding: 3rem 1.5rem;
   }
 
+  .topSection {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: 0;
   }
 
   .title {
@@ -171,23 +179,21 @@
   }
 
   .stats {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 2rem 0;
-  }
-
-  .stats {
-    gap: 2rem;
-  }
-
-  .statIcon {
-    width: 60px;
-    height: 60px;
-    padding: 0.5rem;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-left: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-left: none;
+    border-top: 3px solid #e30613;
   }
 
   .statValue {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .statLabel {
+    font-size: 0.75rem;
   }
 
   .features {
@@ -197,6 +203,16 @@
 
   .featureCard {
     padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .featureContent {
+    text-align: center;
+  }
+
+  .featureIcon {
+    margin: 0 auto;
   }
 }
 
