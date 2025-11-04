@@ -48,11 +48,26 @@ export default function About() {
         <div className={styles.topSection}>
           <div className={styles.header}>
             <h2 className={styles.title}>Meistä</h2>
-            <p className={styles.subtitle}>
-              Yalla on perheyritys, joka aloitti toimintansa vuonna 2016. 
-              Olemme kasvaneet luotettavaksi ruokakaupaksi, joka tarjoaa laadukkaita 
-              tuotteita ja erinomaista asiakaspalvelua.
-            </p>
+            <div className={styles.subtitle}>
+              <p>
+                Yalla on vuonna 2016 perustettu perheyritys, joka on kasvanut
+                luotettavaksi ruokakaupaksi tuoreiden ja laadukkaiden
+                tuotteidensa ansiosta. Uskomme, että hyvä ruoka tekee arjesta
+                paremman, ja siksi panostamme aina tuoreuteen, makuun ja
+                palveluun.
+              </p>
+              <p>
+                Valikoimastamme löydät päivittäin tuoretta lihaa, sesongin
+                vihanneksia ja hedelmiä, sekä vaihtuvan valikoiman eksoottisia
+                tuotteita eri puolilta maailmaa. Tarjoamme myös tuoretta leipää,
+                mausteita ja muita herkkuja, jotka tekevät ruoanlaitosta
+                inspiroivaa.
+              </p>
+              <p>
+                Yallassa yhdistyvät laatu, ystävällinen palvelu ja yhteisöllinen
+                tunnelma – juuri kuten hyvässä ruokakaupassa kuuluukin.
+              </p>
+            </div>
           </div>
 
           <div className={styles.stats}>
@@ -80,4 +95,3 @@ export default function About() {
     </section>
   );
 }
-

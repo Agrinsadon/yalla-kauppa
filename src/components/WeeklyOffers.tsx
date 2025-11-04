@@ -5,11 +5,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './WeeklyOffers.module.css';
 
+type OfferImage = {
+  src: string;
+  alt: string;
+};
+
 type Offer = {
   id: string;
   title: string;
-  imageSrc: string;
-  imageAlt: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  imageGallery?: OfferImage[];
   price: string;
   originalPrice: string;
   discount: string;
@@ -18,73 +24,56 @@ type Offer = {
   href: string;
 };
 
-const createPlaceholderImage = (label: string, color: string) => {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
-      <defs>
-        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${color}" stop-opacity="0.85" />
-          <stop offset="100%" stop-color="${color}" stop-opacity="1" />
-        </linearGradient>
-      </defs>
-      <rect width="640" height="480" rx="32" fill="url(#grad)" />
-      <text x="50%" y="54%" font-family="Inter, 'SF Pro Text', system-ui" font-size="64" font-weight="700" text-anchor="middle" fill="#ffffff" opacity="0.85">
-        ${label}
-      </text>
-    </svg>
-  `;
-
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-};
-
 const offers: Offer[] = [
   {
-    id: 'fresh-basket',
-    title: 'Viikon vihannesvalikoima',
-    imageSrc: '/landingpage.jpg',
-    imageAlt: 'Tuoreita vihanneksia ja hedelmiä koriin koottuna',
-    price: '14,90 €',
-    originalPrice: '19,90 €',
+    id: 'meat-poultry',
+    title: 'Liha & kana',
+    imageSrc: '/liha.jpg',
+    imageAlt: 'Valikoima tuoreita liha- ja kanatuotteita',
+    price: '24,90 €',
+    originalPrice: '32,50 €',
+    discount: '-23%',
+    validUntil: 'Voimassa 4.–10.11.',
+    ctaLabel: 'Katso',
+    href: '/tarjoukset#liha',
+  },
+  {
+    id: 'veg-herbs',
+    title: 'Vihannekset & yrtit',
+    imageSrc: '/yrtit.jpg',
+    imageAlt: 'Vihanneksia ja yrttejä korissa',
+    price: '12,50 €',
+    originalPrice: '16,90 €',
+    discount: '-26%',
+    validUntil: 'Voimassa 4.–10.11.',
+    ctaLabel: 'Katso',
+    href: '/tarjoukset#vihannekset',
+  },
+  {
+    id: 'fruits',
+    title: 'Hedelmät',
+    imageGallery: [
+      { src: '/hedelmät.jpg', alt: 'Klassisia hedelmiä vadilla' },
+      { src: '/hedelmät2.jpg', alt: 'Trooppisia hedelmiä pöydällä' },
+    ],
+    price: '9,20 €',
+    originalPrice: '12,40 €',
+    discount: '-26%',
+    validUntil: 'Voimassa 4.–10.11.',
+    ctaLabel: 'Katso',
+    href: '/tarjoukset#hedelmat',
+  },
+  {
+    id: 'other-essentials',
+    title: 'Muut arjen suosikit',
+    imageSrc: '/muut.jpg',
+    imageAlt: 'Kattaus erilaisia arjen ruokatuotteita',
+    price: '6,90 €',
+    originalPrice: '9,20 €',
     discount: '-25%',
     validUntil: 'Voimassa 4.–10.11.',
     ctaLabel: 'Katso',
-    href: '/tarjoukset#fresh-basket',
-  },
-  {
-    id: 'alibaba-favorites',
-    title: 'Alibaba suosikit',
-    imageSrc: '/alibaba.png',
-    imageAlt: 'Alibaba brändin tuotteita hyllyllä',
-    price: '8,50 €',
-    originalPrice: '11,90 €',
-    discount: '-29%',
-    validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
-    href: '/tarjoukset#alibaba',
-  },
-  {
-    id: 'asia-express',
-    title: 'Asia Express ateriapaketti',
-    imageSrc: '/asia_express_food.png',
-    imageAlt: 'Aasialainen ateriapaketti tarjoiltuna kulhossa',
-    price: '5,90 €',
-    originalPrice: '7,90 €',
-    discount: '-25%',
-    validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
-    href: '/tarjoukset#asia-express',
-  },
-  {
-    id: 'coffee-club',
-    title: 'Paahtimon kahvipavut',
-    imageSrc: createPlaceholderImage('Paahdetut pavut', '#6366F1'),
-    imageAlt: 'Tuoreita kahvipapuja säiliössä',
-    price: '11,40 €',
-    originalPrice: '15,20 €',
-    discount: '-25%',
-    validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
-    href: '/tarjoukset#coffee',
+    href: '/tarjoukset#muut',
   },
 ];
 
@@ -93,7 +82,14 @@ type OfferCardProps = {
 };
 
 function OfferCard({ offer }: OfferCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const totalImages = offer.imageGallery ? offer.imageGallery.length : 1;
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+
+  const handleImageLoaded = () => {
+    setImagesLoaded((count) => count + 1);
+  };
+
+  const allImagesLoaded = imagesLoaded >= totalImages;
 
   return (
     <article
@@ -101,17 +97,37 @@ function OfferCard({ offer }: OfferCardProps) {
       role="group"
       aria-label={`${offer.title}, alennus ${offer.discount}`}
     >
-      <div className={styles.imageWrapper}>
-        {!imageLoaded && <div className={styles.imageSkeleton} aria-hidden="true" />}
-        <Image
-          src={offer.imageSrc}
-          alt={offer.imageAlt}
-          fill
-          priority={false}
-          sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 320px"
-          className={`${styles.image} ${imageLoaded ? styles.imageVisible : ''}`}
-          onLoadingComplete={() => setImageLoaded(true)}
-        />
+      <div className={`${styles.imageWrapper} ${offer.imageGallery ? styles.imageWrapperMulti : ''}`}>
+        {!allImagesLoaded && <div className={styles.imageSkeleton} aria-hidden="true" />}
+        {offer.imageGallery ? (
+          <div className={styles.imageGrid} role="presentation">
+            {offer.imageGallery.map((img) => (
+              <div key={img.src} className={styles.imageCell}>
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  priority={false}
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 320px"
+                  className={`${styles.image} ${allImagesLoaded ? styles.imageVisible : ''}`}
+                  onLoadingComplete={handleImageLoaded}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          offer.imageSrc && (
+            <Image
+              src={offer.imageSrc}
+              alt={offer.imageAlt ?? ''}
+              fill
+              priority={false}
+              sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 320px"
+              className={`${styles.image} ${allImagesLoaded ? styles.imageVisible : ''}`}
+              onLoadingComplete={handleImageLoaded}
+            />
+          )
+        )}
         <span className={styles.discountBadge} aria-hidden="true">
           {offer.discount}
         </span>
@@ -125,6 +141,13 @@ function OfferCard({ offer }: OfferCardProps) {
           </p>
         </div>
         <p className={styles.validity}>{offer.validUntil}</p>
+        <Link
+          href={offer.href}
+          className={styles.cardButton}
+          aria-label={`${offer.ctaLabel} - ${offer.title}`}
+        >
+          {offer.ctaLabel}
+        </Link>
       </div>
     </article>
   );

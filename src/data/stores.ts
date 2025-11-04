@@ -8,6 +8,8 @@ export interface Store {
     weekdays: string;
     weekends: string;
   };
+  phone?: string;
+  email?: string;
 }
 
 export const stores: Store[] = [
@@ -21,6 +23,7 @@ export const stores: Store[] = [
       weekdays: 'Ma-Pe 9:00-20:00',
       weekends: 'La-Su 10:00-19:00',
     },
+    email: 'info@yalla.fi',
   },
   {
     id: 'myyrmaki',
@@ -32,6 +35,7 @@ export const stores: Store[] = [
       weekdays: 'Ma-Pe 9:00-20:00',
       weekends: 'La-Su 10:00-19:00',
     },
+    email: 'info@yalla.fi',
   },
   {
     id: 'koivukyla',
@@ -43,6 +47,7 @@ export const stores: Store[] = [
       weekdays: 'Ma-Pe 9:00-20:00',
       weekends: 'La-Su 10:00-19:00',
     },
+    email: 'info@yalla.fi',
   },
   {
     id: 'tikkurila',
@@ -51,9 +56,11 @@ export const stores: Store[] = [
     postalCode: '01300',
     city: 'Vantaa',
     openingHours: {
-      weekdays: 'Ma-Pe 9:00-20:00',
-      weekends: 'La-Su 10:00-19:00',
+      weekdays: 'Ma-Su 10:00-19:00',
+      weekends: '',
     },
+    phone: '044 236 7262',
+    email: 'tikkurila@yalla.fi',
   },
   {
     id: 'vuosaari',
@@ -62,9 +69,10 @@ export const stores: Store[] = [
     postalCode: '00980',
     city: 'Helsinki',
     openingHours: {
-      weekdays: 'Ma-Pe 9:00-20:00',
-      weekends: 'La-Su 10:00-19:00',
+      weekdays: 'Ma-Su 10:00-21:00',
+      weekends: '',
     },
+    phone: '041 312 2479',
+    email: 'vuosaari@yalla.fi',
   },
 ];
-

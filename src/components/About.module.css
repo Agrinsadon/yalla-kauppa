@@ -34,6 +34,16 @@
   margin: 0;
 }
 
+.subtitle p {
+  margin: 0 0 1.2rem 0;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.subtitle p:last-child {
+  margin-bottom: 0;
+}
+
 .stats {
   display: flex;
   gap: 5rem;

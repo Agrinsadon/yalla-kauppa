@@ -82,6 +82,18 @@
   line-height: 1.5;
 }
 
+.link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: #e30613;
+  outline: none;
+}
+
 .routeButton {
   display: flex;
   align-items: center;
@@ -122,4 +134,3 @@
     gap: 1.25rem;
   }
 }
-

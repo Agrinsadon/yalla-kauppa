@@ -121,6 +121,35 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: 20px;
+}
+
+.imageWrapperMulti {
+  padding: 0;
+}
+
+.imageGrid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 0;
+}
+
+.imageCell {
+  position: relative;
+  flex: 1 1 50%;
+  overflow: hidden;
+  background: none;
+}
+
+.imageCell:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.imageCell:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 .image {
@@ -136,7 +165,14 @@
 .imageSkeleton {
   position: absolute;
   inset: 0;
+  background: linear-gradient(90deg, rgba(226, 232, 240, 0.6), rgba(226, 232, 240, 0.9), rgba(226, 232, 240, 0.6));
   animation: pulse 1.5s ease-in-out infinite;
+  z-index: 1;
+  border-radius: 20px;
+}
+
+.imageWrapperMulti .imageSkeleton {
+  border-radius: 20px;
 }
 
 .discountBadge {
@@ -150,6 +186,7 @@
   font-weight: 600;
   font-size: 0.85rem;
   box-shadow: 0 10px 20px rgba(239, 68, 68, 0.25);
+  z-index: 2;
 }
 
 .cardBody {
@@ -241,6 +278,17 @@
   .inner {
     gap: 3rem;
   }
+
+  .imageGrid {
+    gap: 0.6rem;
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .imageGrid {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 640px) {
@@ -261,5 +309,9 @@
   .secondaryAction {
     width: 100%;
     text-align: center;
+  }
+
+  .imageGrid {
+    gap: 0;
   }
 }

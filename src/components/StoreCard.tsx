@@ -1,5 +1,5 @@
 import { Store } from '@/data/stores';
-import { MapPin, Clock } from 'lucide-react';
+import { MapPin, Clock, Phone } from 'lucide-react';
 import styles from './StoreCard.module.css';
 
 interface StoreCardProps {
@@ -9,6 +9,7 @@ interface StoreCardProps {
 export default function StoreCard({ store }: StoreCardProps) {
   const fullAddress = `${store.address}, ${store.postalCode} ${store.city}`;
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+  const sanitizedPhone = store.phone ? store.phone.replace(/\s+/g, '') : undefined;
 
   return (
     <div className={styles.card}>
@@ -34,10 +35,38 @@ export default function StoreCard({ store }: StoreCardProps) {
             </div>
             <div>
               <p className={styles.label}>Aukioloajat</p>
-              <p className={styles.value}>{store.openingHours.weekdays}</p>
-              <p className={styles.value}>{store.openingHours.weekends}</p>
+              {store.openingHours.weekdays && (
+                <p className={styles.value}>{store.openingHours.weekdays}</p>
+              )}
+              {store.openingHours.weekends && (
+                <p className={styles.value}>{store.openingHours.weekends}</p>
+              )}
             </div>
           </div>
+          {(store.phone || store.email) && (
+            <div className={styles.infoItem}>
+              <div className={styles.iconWrapper}>
+                <Phone className={styles.icon} size={24} />
+              </div>
+              <div>
+                <p className={styles.label}>Yhteystiedot</p>
+                {store.phone && (
+                  <p className={styles.value}>
+                    <a href={`tel:${sanitizedPhone}`} className={styles.link}>
+                      {store.phone}
+                    </a>
+                  </p>
+                )}
+                {store.email && (
+                  <p className={styles.value}>
+                    <a href={`mailto:${store.email}`} className={styles.link}>
+                      {store.email}
+                    </a>
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         <a
@@ -53,4 +82,3 @@ export default function StoreCard({ store }: StoreCardProps) {
     </div>
   );
 }
-

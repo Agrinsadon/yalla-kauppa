@@ -10,14 +10,12 @@ export default function Contact() {
               <p className={styles.kicker}>Ota yhteyttä</p>
             </div>
             <p className={styles.description}>
-              Yalla Kauppa on markkinahenkinen kohtaamispaikka, jossa tarjoamme tuoreita
-              tuotteita, paikallista palvelua ja apua arjen asioihin. Kerro meille
-              tarpeesi – oli kyseessä tilaus, yhteistyö tai myymäläkokemus – niin ohjaamme
-              viestisi oikealle henkilölle.
+              Yalla Kauppa on luotettava ja helposti lähestyttävä toimija, joka kuuntelee asiakkaitaan ja kumppaneitaan. Ota yhteyttä kaikissa kauppaamme, palveluihin tai yhteistyöhön liittyvissä asioissa – autamme mielellämme.
+Voit myös antaa palautetta tai tehdä reklamaation vaivattomasti tämän lomakkeen kautta.
             </p>
             <hr className={styles.divider} />
             <ul className={styles.quickInfo}>
-              <li>Voi tehdä reklamaation vaivattomasti tämän lomakkeen kautta</li>
+              <li>Voit tehdä reklamaation vaivattomasti tämän lomakkeen kautta</li>
               <li>Vastaamme useimmiten saman päivän aikana</li>
               <li>Asiakaspalvelu palvelee suoraan myymälästä käsin</li>
             </ul>
