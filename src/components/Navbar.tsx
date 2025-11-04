@@ -48,7 +48,7 @@ export default function Navbar() {
               <Link href="/tarjoukset" onClick={closeMenu}>Tarjoukset</Link>
             </li>
             <li>
-              <Link href="/yhteystiedot" onClick={closeMenu}>Yhteystiedot</Link>
+              <Link href="/#yhteystiedot" onClick={closeMenu}>Yhteystiedot</Link>
             </li>
           </ul>
           <div className={styles.socialLinks}>
