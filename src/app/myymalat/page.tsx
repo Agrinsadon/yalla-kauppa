@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { stores } from '@/data/stores';
 import StoreCard from '@/components/StoreCard';
 import styles from './page.module.css';
+import Contact from '@/components/Contact';
 
 export const metadata: Metadata = {
   title: 'Myymälät - Yalla Kauppa',
@@ -28,6 +29,7 @@ export default function MyymalatPage() {
           ))}
         </div>
       </section>
+      <Contact />
     </div>
   );
 }

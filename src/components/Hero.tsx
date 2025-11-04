@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -10,23 +11,19 @@ export default function Hero() {
         <div className={styles.content}>
           <div className={styles.textSection}>
             <h1 className={styles.title}>
-              Tervetuloa Yalla-kauppaan
+              Tervetuloa Yallaan
             </h1>
             <p className={styles.subtitle}>
               Suomen parhaat ruuat ja tuoreimmat tuotteet suoraan kotiovellesi. 
               Löydämme sinulle parhaat tuotteet parhaasta hinnasta.
             </p>
-            <p className={styles.description}>
-              Yalla on moderni ruokakauppa, joka tuo sinulle laadukkaita tuotteita 
-              jokapäiväiseen käyttöön. Valikoimassamme on tuhansia tuotteita kaikille makuille.
-            </p>
             <div className={styles.ctaButtons}>
-              <button className={styles.primaryButton}>
-                Selaa tuotteita
-              </button>
-              <button className={styles.secondaryButton}>
+              <Link href="/tarjoukset" className={styles.primaryButton}>
+                Selaa tarjouksia
+              </Link>
+              <Link href="/myymalat" className={styles.secondaryButton}>
                 Löydä myymälä
-              </button>
+              </Link>
             </div>
           </div>
           <div className={styles.imageSection}>
@@ -46,4 +43,3 @@ export default function Hero() {
     </section>
   );
 }
-

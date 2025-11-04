@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="fi">
       <body className={nunito.variable}>
         <Navbar />
+        <ScrollToTop />
         {children}
       </body>
     </html>
