@@ -52,6 +52,8 @@ export default function BrandRibbon() {
         <h2 id="partners-heading" className={styles.sectionTitle}>
           Yhteistyökumppanit &amp; brändit
         </h2>
+        <p className={styles.sectionSubtitle}>
+Yhteistyömme ulottuu ympäri maailmaa – teemme töitä huolellisesti valittujen kansainvälisten toimittajien ja tuottajien kanssa, jotta voimme tarjota asiakkaillemme laajan valikoiman tunnettuja brändejä ja makuja eri kulttuureista. Mukana on myös muutamia kotimaisia suosikkeja, jotka täydentävät kokonaisuuden.        </p>
       </div>
       <div className={styles.carouselWrapperInline}>
         <div className={styles.carousel}>
