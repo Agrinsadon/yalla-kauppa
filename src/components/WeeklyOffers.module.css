@@ -1,0 +1,265 @@
+.section {
+  position: relative;
+  padding: 5rem 0;
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: clamp(2.5rem, 4vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #111827;
+  margin: 0 0 0.75rem;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #6b7280;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.85rem 1.9rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.primaryAction {
+  background-color: #111827;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+}
+
+.primaryAction:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible,
+.cardButton:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.secondaryAction {
+  background-color: rgba(17, 24, 39, 0.04);
+  color: #111827;
+}
+
+.secondaryAction:hover {
+  background-color: rgba(17, 24, 39, 0.07);
+}
+
+.carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(350px, 500px);
+  gap: 1.5rem;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  padding: 0.75rem 0;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  background-color: #fff;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  padding-bottom: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.18);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.imageVisible {
+  opacity: 1;
+}
+
+.imageSkeleton {
+  position: absolute;
+  inset: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.discountBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.9);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.25);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.currentPrice {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.originalPrice {
+  margin: 0;
+  font-size: 1rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.validity {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.cardButton {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  background: #111827;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 32px rgba(15, 23, 42, 0.2);
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@media (min-width: 768px) {
+  .actions {
+    flex-direction: row;
+  }
+
+  .secondaryAction {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .carousel {
+    grid-auto-columns: minmax(280px, 320px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .carousel {
+    grid-auto-columns: minmax(300px, 360px);
+  }
+
+  .inner {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .inner {
+    padding: 0 1.25rem;
+  }
+
+  .carousel {
+    grid-auto-columns: minmax(80vw, 88vw);
+  }
+
+  .actions {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+    text-align: center;
+  }
+}
