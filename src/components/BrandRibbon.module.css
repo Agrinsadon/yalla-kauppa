@@ -1,0 +1,118 @@
+.wrapper {
+  border-top: 4px solid #e30613;
+  border-bottom: 4px solid #e30613;
+  background-color: #ffffff;
+  padding: 2rem 0;
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.carousel::before,
+.carousel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 140px;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff, rgba(255, 255, 255, 0));
+}
+
+.carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff, rgba(255, 255, 255, 0));
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  animation: scroll 28s linear infinite;
+  width: max-content;
+}
+
+.logoItem {
+  flex: 0 0 calc((100vw - 6rem) / 3);
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+}
+
+.logoImage {
+  max-height: 60px;
+  width: auto;
+  opacity: 1;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1024px) {
+  .carousel::before,
+  .carousel::after {
+    width: 100px;
+  }
+
+  .track {
+    gap: 2.5rem;
+  }
+
+  .logoItem {
+    flex-basis: calc((100vw - 5rem) / 3);
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 1.5rem 0;
+  }
+
+  .carousel::before,
+  .carousel::after {
+    width: 70px;
+  }
+
+  .track {
+    gap: 2rem;
+  }
+
+  .logoItem {
+    flex-basis: calc((100vw - 4rem) / 2.6);
+  }
+}
+
+@media (max-width: 540px) {
+  .carousel::before,
+  .carousel::after {
+    width: 48px;
+  }
+
+  .track {
+    gap: 1.5rem;
+  }
+
+  .logoItem {
+    flex-basis: calc((100vw - 3rem) / 2.4);
+  }
+
+  .logoImage {
+    max-height: 48px;
+  }
+}
