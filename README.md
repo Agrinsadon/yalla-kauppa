@@ -38,6 +38,48 @@ npm run dev
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
 
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in your Supabase credentials:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+OFFER_ADMIN_USERNAME=...
+OFFER_ADMIN_PASSWORD=...
+```
+
+### Required Supabase Tables
+
+Create three tables (or equivalent views) in Supabase:
+
+1. `offer_rails`
+   - `id` (text, primary key)
+   - `title` (text)
+   - `description` (text)
+   - `sort_order` (int, optional)
+2. `offer_items`
+   - `id` (uuid)
+   - `rail_id` (text, FK → offer_rails.id)
+   - `product`, `description`, `image_src`, `image_alt`, `price`, `original_price`, `location`, `badge`
+   - `sort_order` (int)
+3. `weekly_offers`
+   - `id` (text)
+   - `title`, `location`, `image_src`, `image_alt`, `price`, `original_price`, `discount`, `valid_until`, `href`
+   - `image_gallery` (jsonb, optional array of `{ src, alt }`)
+   - `sort_order` (int)
+
+Expose the tables via Supabase Row Level Security or policies suited for read-only anon access.
+
+### Admin Page
+
+- Navigate to `/hallinta/uusi-tarjous`
+- Log in with the credentials from `OFFER_ADMIN_USERNAME` / `OFFER_ADMIN_PASSWORD`
+- Voit lisätä kuvan joko omalta koneelta (tiedosto muutetaan data-URL:ksi automaattisesti) tai syöttää valmiin URL-osoitteen
+- Uusi tarjous tallentuu `offer_items`-tauluun Supabasen palvelinavaimen (`SUPABASE_SERVICE_ROLE_KEY`) avulla
+- Onnistuneen tallennuksen jälkeen `/tarjoukset` ja etusivun listaukset päivittyvät ilman kovakoodattuja dummy-tietoja
+
 ## Project Structure
 
 ```

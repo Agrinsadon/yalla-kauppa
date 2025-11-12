@@ -4,76 +4,10 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './WeeklyOffers.module.css';
-
-type OfferImage = {
-  src: string;
-  alt: string;
-};
-
-type Offer = {
-  id: string;
-  title: string;
-  imageSrc?: string;
-  imageAlt?: string;
-  imageGallery?: OfferImage[];
-  price: string;
-  originalPrice: string;
-  discount: string;
-  validUntil: string;
-  href: string;
-};
-
-const offers: Offer[] = [
-  {
-    id: 'meat-poultry',
-    title: 'Liha & kana',
-    imageSrc: '/liha.jpg',
-    imageAlt: 'Valikoima tuoreita liha- ja kanatuotteita',
-    price: '24,90 €',
-    originalPrice: '32,50 €',
-    discount: '-23%',
-    validUntil: 'Voimassa 4.–10.11.',
-    href: '/tarjoukset#liha',
-  },
-  {
-    id: 'veg-herbs',
-    title: 'Vihannekset & yrtit',
-    imageSrc: '/yrtit.jpg',
-    imageAlt: 'Vihanneksia ja yrttejä korissa',
-    price: '12,50 €',
-    originalPrice: '16,90 €',
-    discount: '-26%',
-    validUntil: 'Voimassa 4.–10.11.',
-    href: '/tarjoukset#vihannekset',
-  },
-  {
-    id: 'fruits',
-    title: 'Hedelmät',
-    imageGallery: [
-      { src: '/hedelmät.jpg', alt: 'Klassisia hedelmiä vadilla' },
-      { src: '/hedelmät2.jpg', alt: 'Trooppisia hedelmiä pöydällä' },
-    ],
-    price: '9,20 €',
-    originalPrice: '12,40 €',
-    discount: '-26%',
-    validUntil: 'Voimassa 4.–10.11.',
-    href: '/tarjoukset#hedelmat',
-  },
-  {
-    id: 'other-essentials',
-    title: 'Muut arjen suosikit',
-    imageSrc: '/muut.jpg',
-    imageAlt: 'Kattaus erilaisia arjen ruokatuotteita',
-    price: '6,90 €',
-    originalPrice: '9,20 €',
-    discount: '-25%',
-    validUntil: 'Voimassa 4.–10.11.',
-    href: '/tarjoukset#muut',
-  },
-];
+import type { WeeklyOffer } from '@/types/offers';
 
 type OfferCardProps = {
-  offer: Offer;
+  offer: WeeklyOffer;
 };
 
 function OfferCard({ offer }: OfferCardProps) {
@@ -126,6 +60,7 @@ function OfferCard({ offer }: OfferCardProps) {
         <span className={styles.discountBadge} aria-hidden="true">
           {offer.discount}
         </span>
+        <span className={styles.locationBadge}>{offer.location}</span>
       </div>
       <div className={styles.cardBody}>
         <h3 className={styles.cardTitle}>{offer.title}</h3>
@@ -141,11 +76,16 @@ function OfferCard({ offer }: OfferCardProps) {
   );
 }
 
-export default function WeeklyOffers() {
+type WeeklyOffersProps = {
+  offers?: WeeklyOffer[];
+};
+
+export default function WeeklyOffers({ offers = [] }: WeeklyOffersProps) {
   const carouselId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const cardCount = offers.length;
+  const safeOffers = offers.length > 0 ? offers : [];
+  const cardCount = safeOffers.length;
 
   const handleScrollPosition = useCallback(() => {
     const container = containerRef.current;
@@ -185,10 +125,10 @@ export default function WeeklyOffers() {
     };
   }, [handleScrollPosition]);
 
-  const indicatorLabel = useMemo(
-    () => `Kortti ${activeIndex + 1} / ${cardCount}`,
-    [activeIndex, cardCount],
-  );
+  const indicatorLabel = useMemo(() => {
+    if (cardCount === 0) return 'Ei voimassa olevia tarjouksia';
+    return `Kortti ${activeIndex + 1} / ${cardCount}`;
+  }, [activeIndex, cardCount]);
 
   return (
     <section
@@ -216,23 +156,27 @@ export default function WeeklyOffers() {
           </div>
         </header>
 
-        <div
-          className={styles.carouselWrapper}
-          tabIndex={0}
-          aria-label={indicatorLabel}
-        >
+        {safeOffers.length === 0 ? (
+          <p className={styles.emptyState}>Uusia viikkotarjouksia ei juuri nyt – palaa pian!</p>
+        ) : (
           <div
-            id={carouselId}
-            className={styles.carousel}
-            ref={containerRef}
-            role="group"
-            aria-label="Tarjouskortit"
+            className={styles.carouselWrapper}
+            tabIndex={0}
+            aria-label={indicatorLabel}
           >
-            {offers.map((offer) => (
-              <OfferCard key={offer.id} offer={offer} />
-            ))}
+            <div
+              id={carouselId}
+              className={styles.carousel}
+              ref={containerRef}
+              role="group"
+              aria-label="Tarjouskortit"
+            >
+              {safeOffers.map((offer) => (
+                <OfferCard key={offer.id} offer={offer} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

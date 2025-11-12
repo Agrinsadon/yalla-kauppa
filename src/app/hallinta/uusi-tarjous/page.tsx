@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+import { Buffer } from 'node:buffer';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import type { Metadata } from 'next';
@@ -28,10 +29,11 @@ function buildSessionToken(username: string, password: string) {
   return createHash('sha256').update(`${username}:${password}`).digest('hex');
 }
 
-function hasValidSession(store: CookieStore) {
+async function hasValidSession(storePromise: Promise<CookieStore> | CookieStore) {
   const creds = getAdminCredentials();
   if (!creds) return false;
   const expected = buildSessionToken(creds.username, creds.password);
+  const store = await storePromise;
   const existing = store.get(SESSION_COOKIE)?.value;
   return existing === expected;
 }
@@ -51,11 +53,13 @@ const loginAction = async (_state: ActionState, formData: FormData): Promise<Act
     return { success: false, message: 'Virheellinen käyttäjätunnus tai salasana' };
   }
 
-  const store = cookies();
+  const store = await cookies();
+  const isProduction = process.env.NODE_ENV === 'production';
+
   store.set(SESSION_COOKIE, buildSessionToken(creds.username, creds.password), {
     httpOnly: true,
     sameSite: 'strict',
-    secure: true,
+    secure: isProduction,
     path: '/',
     maxAge: 60 * 60 * 8,
   });
@@ -66,7 +70,7 @@ const loginAction = async (_state: ActionState, formData: FormData): Promise<Act
 
 const logoutAction = async () => {
   'use server';
-  const store = cookies();
+  const store = await cookies();
   store.delete(SESSION_COOKIE);
   revalidatePath('/hallinta/uusi-tarjous');
 };
@@ -74,8 +78,8 @@ const logoutAction = async () => {
 const createOfferAction = async (_state: ActionState, formData: FormData): Promise<ActionState> => {
   'use server';
 
-  const store = cookies();
-  if (!hasValidSession(store)) {
+  const store = await cookies();
+  if (!(await hasValidSession(store))) {
     return { success: false, message: 'Kirjaudu ensin sisään' };
   }
 
@@ -86,7 +90,9 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
 
   const product = formData.get('product')?.toString().trim();
   const description = formData.get('description')?.toString().trim();
-  const imageSrc = formData.get('imageSrc')?.toString().trim();
+  const imageMode = (formData.get('imageMode')?.toString() as 'upload' | 'url') ?? 'upload';
+  const imageSrcInput = formData.get('imageSrc')?.toString().trim();
+  const imageFile = formData.get('imageFile');
   const imageAlt = formData.get('imageAlt')?.toString().trim();
   const price = formData.get('price')?.toString().trim();
   const originalPrice = formData.get('originalPrice')?.toString().trim();
@@ -96,7 +102,7 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
   const startsAt = formData.get('startsAt')?.toString() || null;
   const endsAt = formData.get('endsAt')?.toString() || null;
 
-  if (!product || !description || !imageSrc || !imageAlt || !price || !originalPrice || !location || !categoryId) {
+  if (!product || !description || !imageAlt || !price || !originalPrice || !location || !categoryId) {
     return { success: false, message: 'Täytä kaikki pakolliset kentät' };
   }
 
@@ -104,11 +110,26 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
     return { success: false, message: 'Alkupäivän tulee olla ennen loppupäivää' };
   }
 
+  let resolvedImageSrc = imageSrcInput ?? '';
+  if (imageMode === 'upload') {
+    if (!(imageFile instanceof File) || imageFile.size === 0) {
+      return { success: false, message: 'Valitse kuvatiedosto' };
+    }
+    if (imageFile.size > 1.5 * 1024 * 1024) {
+      return { success: false, message: 'Kuvan maksimikoko on 1.5 Mt' };
+    }
+    const mime = imageFile.type || 'image/jpeg';
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    resolvedImageSrc = `data:${mime};base64,${buffer.toString('base64')}`;
+  } else if (!resolvedImageSrc) {
+    return { success: false, message: 'Anna kuvan URL-osoite' };
+  }
+
   const payload = {
     rail_id: categoryId,
     product,
     description,
-    image_src: imageSrc,
+    image_src: resolvedImageSrc,
     image_alt: imageAlt,
     price,
     original_price: originalPrice,
@@ -129,9 +150,9 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
 };
 
 export default async function NewOfferPage() {
-  const store = cookies();
+  const store = await cookies();
   const creds = getAdminCredentials();
-  const authenticated = store && hasValidSession(store);
+  const authenticated = creds ? await hasValidSession(store) : false;
   const rails = authenticated ? await fetchOfferRails({ includeEmpty: true }) : [];
 
   return (

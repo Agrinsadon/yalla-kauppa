@@ -1,25 +1,18 @@
 import { Metadata } from 'next';
+import { fetchOfferRails } from '@/lib/offers';
 import styles from './page.module.css';
+import RailShowcase from './RailShowcase';
 
-const offers = [
-  {
-    id: 'fresh-produce',
-    title: 'Tuoretuotteet -20%',
-    description: 'Kauden parhaat hedelmät ja vihannekset suoraan tuottajilta.',
-    validUntil: 'Voimassa tällä viikolla',
-  },
-  {
-    id: 'local-bakery',
-    title: 'Lähileipomon herkut 3 kpl / 10€',
-    description: 'Valitse suosikkisi artesaanileivistä, pullista ja croissanteista.',
-    validUntil: 'Voimassa sunnuntaihin asti',
-  },
-  {
-    id: 'coffee-tea',
-    title: 'Kahvit ja teet -15%',
-    description: 'Laaja valikoima tummapaahtoisia kahveja ja laadukkaita teelaatuja.',
-    validUntil: 'Voimassa 30.4. asti',
-  },
+type HeroHighlight = {
+  id: string;
+  label: string;
+  value: string;
+};
+
+const heroHighlights: HeroHighlight[] = [
+  { id: 'drop', label: 'Uudet tarjoukset', value: '2x viikossa' },
+  { id: 'cards', label: 'Kortteja', value: '15+ tuotetta' },
+  { id: 'availability', label: 'Saatavuus', value: 'Kaikki Yalla-myymälät' },
 ];
 
 export const metadata: Metadata = {
@@ -27,29 +20,43 @@ export const metadata: Metadata = {
   description: 'Tutustu Yalla Kaupan ajankohtaisiin tarjouksiin ja löydä parhaat löydöt.',
 };
 
-export default function TarjouksetPage() {
-  return (
-    <div className={styles.container}>
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <h1 className={styles.title}>Ajankohtaiset tarjoukset</h1>
-          <p className={styles.subtitle}>
-            Poimi parhaat tarjoukset arjen ruokaostoksiin ja hemmottele itseäsi sesongin herkuilla.
-          </p>
-        </div>
-      </section>
+export default async function TarjouksetPage() {
+  const offerRails = await fetchOfferRails();
 
-      <section className={styles.offersSection}>
-        <div className={styles.offersGrid}>
-          {offers.map((offer) => (
-            <article key={offer.id} className={styles.offerCard}>
-              <h2 className={styles.offerTitle}>{offer.title}</h2>
-              <p className={styles.offerDescription}>{offer.description}</p>
-              <p className={styles.offerValidity}>{offer.validUntil}</p>
-            </article>
+  return (
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <p className={styles.eyebrow}>Yalla Kauppa • Ajankohtaiset tarjoukset</p>
+        <h1 className={styles.title}>Täydelliset tarjoukset jokaiseen ruokapöytään</h1>
+        <p className={styles.subtitle}>
+          Kuratoitu tarjouskokonaisuus, jossa jokainen kortti tuo esiin tuotteen kuvan, hinnat ja
+          sijainnin. Inspiroidu ja nappaa suosikit saman tien.
+        </p>
+        <div className={styles.ctaRow}>
+          <a className={styles.primaryCta} href="/myymalat">
+            Löydä lähin myymälä
+          </a>
+          <a className={styles.secondaryCta} href="#tarjouskategoriat">
+            Selaa tämän viikon kortit
+          </a>
+        </div>
+        <div className={styles.heroHighlights}>
+          {heroHighlights.map((highlight) => (
+            <div key={highlight.id} className={styles.highlightCard}>
+              <p className={styles.highlightValue}>{highlight.value}</p>
+              <p className={styles.highlightLabel}>{highlight.label}</p>
+            </div>
           ))}
         </div>
       </section>
+
+      {offerRails.length === 0 ? (
+        <p className={styles.emptyState}>
+          Tarjouksia ei ole vielä lisätty. Tulethan takaisin pian!
+        </p>
+      ) : (
+        <RailShowcase rails={offerRails} />
+      )}
     </div>
   );
 }
