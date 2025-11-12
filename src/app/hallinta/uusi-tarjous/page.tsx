@@ -33,7 +33,7 @@ async function hasValidSession(storePromise: Promise<CookieStore> | CookieStore)
   const creds = getAdminCredentials();
   if (!creds) return false;
   const expected = buildSessionToken(creds.username, creds.password);
-  const store = await storePromise;
+  const store = storePromise instanceof Promise ? await storePromise : storePromise;
   const existing = store.get(SESSION_COOKIE)?.value;
   return existing === expected;
 }
