@@ -20,7 +20,6 @@ type Offer = {
   originalPrice: string;
   discount: string;
   validUntil: string;
-  ctaLabel: string;
   href: string;
 };
 
@@ -34,7 +33,6 @@ const offers: Offer[] = [
     originalPrice: '32,50 €',
     discount: '-23%',
     validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
     href: '/tarjoukset#liha',
   },
   {
@@ -46,7 +44,6 @@ const offers: Offer[] = [
     originalPrice: '16,90 €',
     discount: '-26%',
     validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
     href: '/tarjoukset#vihannekset',
   },
   {
@@ -60,7 +57,6 @@ const offers: Offer[] = [
     originalPrice: '12,40 €',
     discount: '-26%',
     validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
     href: '/tarjoukset#hedelmat',
   },
   {
@@ -72,7 +68,6 @@ const offers: Offer[] = [
     originalPrice: '9,20 €',
     discount: '-25%',
     validUntil: 'Voimassa 4.–10.11.',
-    ctaLabel: 'Katso',
     href: '/tarjoukset#muut',
   },
 ];
@@ -141,13 +136,6 @@ function OfferCard({ offer }: OfferCardProps) {
           </p>
         </div>
         <p className={styles.validity}>{offer.validUntil}</p>
-        <Link
-          href={offer.href}
-          className={styles.cardButton}
-          aria-label={`${offer.ctaLabel} - ${offer.title}`}
-        >
-          {offer.ctaLabel}
-        </Link>
       </div>
     </article>
   );
