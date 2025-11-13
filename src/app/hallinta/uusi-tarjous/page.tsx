@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const SESSION_COOKIE = 'yk-admin-session';
 
-type CookieStore = ReturnType<typeof cookies>;
+type CookieStore = Awaited<ReturnType<typeof cookies>>;
 
 function getAdminCredentials() {
   const username = process.env.OFFER_ADMIN_USERNAME;
@@ -29,11 +29,10 @@ function buildSessionToken(username: string, password: string) {
   return createHash('sha256').update(`${username}:${password}`).digest('hex');
 }
 
-async function hasValidSession(storePromise: Promise<CookieStore> | CookieStore) {
+async function hasValidSession(store: CookieStore) {
   const creds = getAdminCredentials();
   if (!creds) return false;
   const expected = buildSessionToken(creds.username, creds.password);
-  const store = storePromise instanceof Promise ? await storePromise : storePromise;
   const existing = store.get(SESSION_COOKIE)?.value;
   return existing === expected;
 }
