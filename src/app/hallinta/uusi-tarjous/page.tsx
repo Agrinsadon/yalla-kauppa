@@ -7,6 +7,7 @@ import { fetchOfferRails } from '@/lib/offers';
 import { getSupabaseAdminClient } from '@/lib/supabaseClient';
 import OfferForm from './OfferForm';
 import LoginForm from './LoginForm';
+import CategoryForm from './CategoryForm';
 import type { ActionState } from './actionTypes';
 import styles from './page.module.css';
 
@@ -27,6 +28,15 @@ function getAdminCredentials() {
 
 function buildSessionToken(username: string, password: string) {
   return createHash('sha256').update(`${username}:${password}`).digest('hex');
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 32);
 }
 
 async function hasValidSession(store: CookieStore) {
@@ -72,6 +82,48 @@ const logoutAction = async () => {
   const store = await cookies();
   store.delete(SESSION_COOKIE);
   revalidatePath('/hallinta/uusi-tarjous');
+};
+
+const createCategoryAction = async (
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> => {
+  'use server';
+
+  const store = await cookies();
+  if (!(await hasValidSession(store))) {
+    return { success: false, message: 'Kirjaudu ensin sisään' };
+  }
+
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    return { success: false, message: 'Supabase ei ole konfiguroitu' };
+  }
+
+  const title = formData.get('categoryTitle')?.toString().trim();
+  const description = formData.get('categoryDescription')?.toString().trim();
+
+  if (!title || !description) {
+    return { success: false, message: 'Täytä nimi ja kuvaus' };
+  }
+
+  const baseSlug = slugify(title);
+  const id = `${baseSlug}-${Date.now().toString(36)}`;
+
+  const { error } = await supabase.from('offer_rails').insert({
+    id,
+    title,
+    description,
+  });
+
+  if (error) {
+    console.error('Supabase create category error', error);
+    return { success: false, message: 'Kategorian luonti epäonnistui' };
+  }
+
+  revalidatePath('/hallinta/uusi-tarjous');
+  revalidatePath('/tarjoukset');
+  return { success: true, message: 'Kategoria lisätty' };
 };
 
 const createOfferAction = async (_state: ActionState, formData: FormData): Promise<ActionState> => {
@@ -166,6 +218,7 @@ export default async function NewOfferPage() {
         </div>
       ) : authenticated ? (
         <>
+          <CategoryForm action={createCategoryAction} />
           <OfferForm rails={rails} action={createOfferAction} />
           <div className={styles.logoutRow}>
             <form action={logoutAction}>
