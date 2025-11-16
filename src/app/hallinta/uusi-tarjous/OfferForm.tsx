@@ -4,6 +4,7 @@ import { useActionState, useState } from 'react';
 import type { OfferRail } from '@/types/offers';
 import type { ActionState } from './actionTypes';
 import styles from './page.module.css';
+import { stores } from '@/data/stores';
 
 type OfferFormProps = {
   rails: OfferRail[];
@@ -16,6 +17,19 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
   const [state, formAction] = useActionState(action, initialState);
   const [imageMode, setImageMode] = useState<'upload' | 'url'>('upload');
   const noCategories = rails.length === 0;
+  const [priceValue, setPriceValue] = useState<string>('');
+  const [badgeValue, setBadgeValue] = useState<string>('');
+
+  const computeBadgeFromPrice = (price: number): string => {
+    if (Number.isNaN(price) || price <= 0) return '';
+    let percent = 5;
+    if (price < 5) percent = 5;
+    else if (price < 10) percent = 10;
+    else if (price < 20) percent = 15;
+    else if (price < 50) percent = 20;
+    else percent = 25;
+    return `-${percent}%`;
+  };
 
   return (
     <form className={styles.panel} action={formAction}>
@@ -36,7 +50,14 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
           <label htmlFor="location" className={styles.label}>
             Myymälä / sijainti
           </label>
-          <input id="location" name="location" className={styles.input} required />
+          <select id="location" name="location" className={styles.select} required>
+            <option value="">Valitse myymälä</option>
+            {stores.map((s) => (
+              <option key={s.id} value={s.name}>
+                {s.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -121,13 +142,36 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
           <label htmlFor="price" className={styles.label}>
             Tarjoushinta
           </label>
-          <input id="price" name="price" className={styles.input} required />
+          <input
+            id="price"
+            name="price"
+            className={styles.input}
+            type="number"
+            step="0.01"
+            min="0"
+            value={priceValue}
+            onChange={(e) => {
+              const v = e.target.value;
+              setPriceValue(v);
+              const num = parseFloat(v.replace(',', '.'));
+              setBadgeValue(computeBadgeFromPrice(num));
+            }}
+            required
+          />
         </div>
         <div className={styles.fieldGroup}>
           <label htmlFor="badge" className={styles.label}>
-            Badge (valinnainen)
+            Badge (automaattinen)
           </label>
-          <input id="badge" name="badge" className={styles.input} placeholder="-25%" />
+          <input
+            id="badge"
+            name="badge"
+            className={styles.input}
+            value={badgeValue}
+            readOnly
+            title="Lasketaan automaattisesti hinnan perusteella"
+            placeholder="-"
+          />
         </div>
       </div>
 

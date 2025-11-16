@@ -51,6 +51,13 @@ export default function RailShowcase({ rails }: RailShowcaseProps) {
 
   const railsToRender = visibleRails.length > 0 ? visibleRails : filteredRails;
 
+  const formatDate = (iso?: string) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString('fi-FI');
+  };
+
   return (
     <div className={styles.categoryShowcase}>
       <nav className={styles.storeNav} aria-label="Myymäläsuodatin">
@@ -122,8 +129,8 @@ export default function RailShowcase({ rails }: RailShowcaseProps) {
                   {(offer.startsAt || offer.endsAt) && (
                     <p className={styles.offerValidity}>
                       {offer.startsAt && offer.endsAt
-                        ? `Voimassa ${offer.startsAt} – ${offer.endsAt}`
-                        : `Voimassa ${offer.startsAt || offer.endsAt}`}
+                        ? `Voimassa ${formatDate(offer.startsAt)} – ${formatDate(offer.endsAt)}`
+                        : `Voimassa ${formatDate(offer.startsAt || offer.endsAt)}`}
                     </p>
                   )}
                   <div className={styles.priceRow}>
