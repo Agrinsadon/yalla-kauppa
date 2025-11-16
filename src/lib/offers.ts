@@ -1,4 +1,4 @@
-import type { OfferRail, StoreOffer, WeeklyOffer } from '@/types/offers';
+import type { OfferRail, StoreOffer } from '@/types/offers';
 import { getSupabaseClient } from './supabaseClient';
 
 type OfferRailRow = {
@@ -22,22 +22,6 @@ type OfferRailRow = {
   sort_order?: number | null;
 };
 
-type WeeklyOfferRow = {
-  id: string;
-  title: string;
-  location: string;
-  image_src?: string | null;
-  image_alt?: string | null;
-  image_gallery?: { src: string; alt: string }[] | null;
-  price: string;
-  original_price: string;
-  discount: string;
-  valid_until: string;
-  href: string;
-  sort_order?: number | null;
-  starts_at?: string | null;
-  ends_at?: string | null;
-};
 
 function mapStoreOffer(row: OfferRailRow['offers'][number]): StoreOffer {
   return {
@@ -55,23 +39,6 @@ function mapStoreOffer(row: OfferRailRow['offers'][number]): StoreOffer {
   };
 }
 
-function mapWeeklyOffer(row: WeeklyOfferRow): WeeklyOffer {
-  return {
-    id: row.id,
-    title: row.title,
-    location: row.location,
-    imageSrc: row.image_src ?? undefined,
-    imageAlt: row.image_alt ?? undefined,
-    imageGallery: Array.isArray(row.image_gallery) ? row.image_gallery : undefined,
-    price: row.price,
-    originalPrice: row.original_price,
-    discount: row.discount,
-    validUntil: row.valid_until,
-    href: row.href,
-    startsAt: row.starts_at ?? undefined,
-    endsAt: row.ends_at ?? undefined,
-  };
-}
 
 type FetchOfferRailsOptions = {
   includeEmpty?: boolean;
@@ -92,9 +59,18 @@ export async function fetchOfferRails(
     .order('sort_order', { ascending: true });
 
   if (error || !data) {
-    if (error?.code === 'PGRST205') {
+    const msg = (error as any)?.message || '';
+    if ((error as any)?.code === 'PGRST205') {
       console.warn(
         'Supabase: offer_rails view puuttuu. Luo taulu offer_rails ja offer_items README-ohjeen mukaan.',
+      );
+    } else if (/fetch failed/i.test(msg)) {
+      console.warn(
+        'Supabase: verkko- tai konfiguraatiovirhe (fetch failed). Tarkista:\n' +
+          '- NEXT_PUBLIC_SUPABASE_URL (sisältää https:// ja ilman loppuslaashia)\n' +
+          '- NEXT_PUBLIC_SUPABASE_ANON_KEY on oikea\n' +
+          '- Internet-yhteys / palomuuri / VPN / välityspalvelin\n' +
+          '- Kehitysympäristön kellonaika on oikein',
       );
     } else {
       console.error('Supabase offer_rails error', error);
@@ -115,27 +91,3 @@ export async function fetchOfferRails(
   return includeEmpty ? mapped : mapped.filter((rail) => rail.offers.length > 0);
 }
 
-export async function fetchWeeklyOffers(): Promise<WeeklyOffer[]> {
-  const supabase = getSupabaseClient();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from('weekly_offers')
-    .select(
-      'id, title, location, image_src, image_alt, image_gallery, price, original_price, discount, valid_until, href, sort_order, starts_at, ends_at',
-    )
-    .order('sort_order', { ascending: true });
-
-  if (error || !data) {
-    if (error?.code === 'PGRST205') {
-      console.warn(
-        "Supabase: weekly_offers-taulu puuttuu. Luo taulu tai näkymä nimeltä 'weekly_offers' README:n mukaisesti.",
-      );
-    } else {
-      console.error('Supabase weekly_offers error', error);
-    }
-    return [];
-  }
-
-  return (data as WeeklyOfferRow[]).map(mapWeeklyOffer);
-}

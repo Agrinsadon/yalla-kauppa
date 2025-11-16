@@ -39,3 +39,4 @@ export type WeeklyOffer = {
   startsAt?: string;
   endsAt?: string;
 };
+

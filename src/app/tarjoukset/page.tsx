@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TarjouksetPage() {
-  const offerRails = await fetchOfferRails();
+  const offerRails = await fetchOfferRails({ includeEmpty: true });
 
   return (
     <div className={styles.page}>

@@ -52,7 +52,7 @@ OFFER_ADMIN_PASSWORD=...
 
 ### Required Supabase Tables
 
-Create three tables (or equivalent views) in Supabase:
+Create two tables (or equivalent views) in Supabase:
 
 1. `offer_rails`
    - `id` (text, primary key)
@@ -63,11 +63,6 @@ Create three tables (or equivalent views) in Supabase:
    - `id` (uuid)
    - `rail_id` (text, FK → offer_rails.id)
    - `product`, `description`, `image_src`, `image_alt`, `price`, `original_price`, `location`, `badge`
-   - `sort_order` (int)
-3. `weekly_offers`
-   - `id` (text)
-   - `title`, `location`, `image_src`, `image_alt`, `price`, `original_price`, `discount`, `valid_until`, `href`
-   - `image_gallery` (jsonb, optional array of `{ src, alt }`)
    - `sort_order` (int)
 
 Expose the tables via Supabase Row Level Security or policies suited for read-only anon access.
