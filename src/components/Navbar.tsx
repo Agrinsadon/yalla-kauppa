@@ -33,8 +33,9 @@ export default function Navbar() {
           <Image
             src="/yalla.png"
             alt="Yalla Logo"
-            width={120}
-            height={40}
+            width={100}
+            height={20}
+            style={{ width: '100%', height: '100%' }}
             priority
           />
         </Link>
