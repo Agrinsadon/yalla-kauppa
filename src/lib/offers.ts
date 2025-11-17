@@ -39,6 +39,36 @@ function mapStoreOffer(row: OfferRailRow['offers'][number]): StoreOffer {
   };
 }
 
+export async function fetchLatestOffers(limit: number = 5): Promise<StoreOffer[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  // Try created_at; fallback to id desc if column missing (handled by error)
+  const { data, error } = await supabase
+    .from('offer_items')
+    .select(
+      'id, product, description, image_src, image_alt, price, original_price, location, badge, starts_at, ends_at'
+    )
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.warn('Supabase fetchLatestOffers warning:', (error as any)?.message);
+    // Fallback ordering by id when created_at is not available
+    const fallback = await supabase
+      .from('offer_items')
+      .select(
+        'id, product, description, image_src, image_alt, price, original_price, location, badge, starts_at, ends_at'
+      )
+      .order('id', { ascending: false })
+      .limit(limit);
+    if (fallback.error || !fallback.data) return [];
+    return fallback.data.map(mapStoreOffer);
+  }
+
+  return (data ?? []).map(mapStoreOffer);
+}
+
 
 type FetchOfferRailsOptions = {
   includeEmpty?: boolean;

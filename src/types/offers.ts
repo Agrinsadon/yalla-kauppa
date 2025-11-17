@@ -27,6 +27,7 @@ export type OfferImage = {
 export type WeeklyOffer = {
   id: string;
   title: string;
+  description?: string;
   location: string;
   imageSrc?: string;
   imageAlt?: string;

@@ -1,9 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import styles from './page.module.css';
-import type { OfferRail, StoreOffer } from '@/types/offers';
+import type { OfferRail } from '@/types/offers';
+import OfferCard from '@/components/OfferCard';
 
 type RailShowcaseProps = {
   rails: OfferRail[];
@@ -51,12 +51,8 @@ export default function RailShowcase({ rails }: RailShowcaseProps) {
 
   const railsToRender = visibleRails.length > 0 ? visibleRails : filteredRails;
 
-  const formatDate = (iso?: string) => {
-    if (!iso) return '';
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return iso;
-    return d.toLocaleDateString('fi-FI');
-  };
+  // Päivämäärien muotoilu hoidetaan OfferCard-komponentissa
+  const formatDate = (_?: string) => '';
 
   return (
     <div className={styles.categoryShowcase}>
@@ -105,45 +101,12 @@ export default function RailShowcase({ rails }: RailShowcaseProps) {
       {railsToRender.map((rail) => (
         <section key={rail.id} id={rail.id} className={styles.railSection} aria-label={rail.title}>
           <header className={styles.railHeader}>
-            <p className={styles.railEyebrow}>Viikkonosto</p>
             <h2 className={styles.railTitle}>{rail.title}</h2>
             <p className={styles.railDescription}>{rail.description}</p>
           </header>
           <div className={styles.railCarousel} role="region" aria-roledescription="carousel">
             {rail.offers.map((offer) => (
-              <article key={offer.id} className={styles.offerCard}>
-                <div className={styles.offerImageWrapper}>
-                  <Image
-                    src={offer.imageSrc}
-                    alt={offer.imageAlt}
-                    fill
-                    sizes="(max-width: 768px) 80vw, (max-width: 1200px) 40vw, 320px"
-                    className={styles.offerImage}
-                  />
-                  <span className={styles.locationBadge}>{offer.location}</span>
-                  {offer.badge && <span className={styles.offerDiscount}>{offer.badge}</span>}
-                </div>
-                <div className={styles.offerCardBody}>
-                  <p className={styles.offerProduct}>{offer.product}</p>
-                  <p className={styles.offerDescription}>{offer.description}</p>
-                  {(offer.startsAt || offer.endsAt) && (
-                    <p className={styles.offerValidity}>
-                      {offer.startsAt && offer.endsAt
-                        ? `Voimassa ${formatDate(offer.startsAt)} – ${formatDate(offer.endsAt)}`
-                        : `Voimassa ${formatDate(offer.startsAt || offer.endsAt)}`}
-                    </p>
-                  )}
-                  <div className={styles.priceRow}>
-                    <span className={styles.currentPrice}>{offer.price}</span>
-                    <span
-                      className={styles.originalPrice}
-                      aria-label={`Normaalihinta ${offer.originalPrice}`}
-                    >
-                      {offer.originalPrice}
-                    </span>
-                  </div>
-                </div>
-              </article>
+              <OfferCard key={offer.id} offer={offer} />
             ))}
           </div>
         </section>

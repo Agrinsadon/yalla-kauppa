@@ -2,78 +2,32 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from './WeeklyOffers.module.css';
 import type { WeeklyOffer } from '@/types/offers';
+import OfferCard from '@/components/OfferCard';
 
 type OfferCardProps = {
   offer: WeeklyOffer;
 };
 
-function OfferCard({ offer }: OfferCardProps) {
-  const totalImages = offer.imageGallery ? offer.imageGallery.length : 1;
-  const [imagesLoaded, setImagesLoaded] = useState(0);
+// Replace local card with shared OfferCard from tarjoukset to keep identical UI
+function OfferCardWrapper({ offer }: OfferCardProps) {
+  // Map WeeklyOffer -> StoreOffer shape minimally used by OfferCard
+  const mapped = {
+    id: offer.id,
+    product: offer.title,
+    description: offer.description || '',
+    imageSrc: offer.imageSrc ?? '',
+    imageAlt: offer.imageAlt ?? '',
+    price: offer.price,
+    originalPrice: offer.originalPrice,
+    location: offer.location,
+    badge: offer.discount,
+    startsAt: offer.startsAt,
+    endsAt: offer.endsAt,
+  } as const;
 
-  const handleImageLoaded = () => {
-    setImagesLoaded((count) => count + 1);
-  };
-
-  const allImagesLoaded = imagesLoaded >= totalImages;
-
-  return (
-    <article
-      className={styles.card}
-      role="group"
-      aria-label={`${offer.title}, alennus ${offer.discount}`}
-    >
-      <div className={`${styles.imageWrapper} ${offer.imageGallery ? styles.imageWrapperMulti : ''}`}>
-        {!allImagesLoaded && <div className={styles.imageSkeleton} aria-hidden="true" />}
-        {offer.imageGallery ? (
-          <div className={styles.imageGrid} role="presentation">
-            {offer.imageGallery.map((img) => (
-              <div key={img.src} className={styles.imageCell}>
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  priority={false}
-                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 320px"
-                  className={`${styles.image} ${allImagesLoaded ? styles.imageVisible : ''}`}
-                  onLoadingComplete={handleImageLoaded}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          offer.imageSrc && (
-            <Image
-              src={offer.imageSrc}
-              alt={offer.imageAlt ?? ''}
-              fill
-              priority={false}
-              sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 320px"
-              className={`${styles.image} ${allImagesLoaded ? styles.imageVisible : ''}`}
-              onLoadingComplete={handleImageLoaded}
-            />
-          )
-        )}
-        <span className={styles.discountBadge} aria-hidden="true">
-          {offer.discount}
-        </span>
-        <span className={styles.locationBadge}>{offer.location}</span>
-      </div>
-      <div className={styles.cardBody}>
-        <h3 className={styles.cardTitle}>{offer.title}</h3>
-        <div className={styles.priceRow}>
-          <p className={styles.currentPrice}>{offer.price}</p>
-          <p className={styles.originalPrice} aria-label={`Normaalihinta ${offer.originalPrice}`}>
-            {offer.originalPrice}
-          </p>
-        </div>
-        <p className={styles.validity}>{offer.validUntil}</p>
-      </div>
-    </article>
-  );
+  return <OfferCard offer={mapped as any} />;
 }
 
 type WeeklyOffersProps = {
@@ -172,7 +126,7 @@ export default function WeeklyOffers({ offers = [] }: WeeklyOffersProps) {
               aria-label="Tarjouskortit"
             >
               {safeOffers.map((offer) => (
-                <OfferCard key={offer.id} offer={offer} />
+                <OfferCardWrapper key={offer.id} offer={offer} />
               ))}
             </div>
           </div>

@@ -126,9 +126,9 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
 
       <div className={styles.fieldGroup}>
           <label htmlFor="imageAlt" className={styles.label}>
-            Kuvan vaihtoehtoinen teksti
+            Kuvan vaihtoehtoinen teksti (valinnainen)
           </label>
-          <input id="imageAlt" name="imageAlt" className={styles.input} required />
+          <input id="imageAlt" name="imageAlt" className={styles.input} />
       </div>
 
       <div className={styles.fieldGrid}>

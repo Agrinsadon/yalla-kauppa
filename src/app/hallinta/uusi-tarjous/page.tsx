@@ -153,7 +153,7 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
   const startsAt = formData.get('startsAt')?.toString() || null;
   const endsAt = formData.get('endsAt')?.toString() || null;
 
-  if (!product || !description || !imageAlt || !price || !originalPrice || !location || !categoryId) {
+  if (!product || !description || !price || !originalPrice || !location || !categoryId) {
     return { success: false, message: 'Täytä kaikki pakolliset kentät' };
   }
 

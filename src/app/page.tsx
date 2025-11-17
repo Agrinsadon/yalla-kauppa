@@ -3,7 +3,7 @@ import BrandRibbon from '@/components/BrandRibbon';
 import WeeklyOffers from '@/components/WeeklyOffers';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
-import { fetchOfferRails } from '@/lib/offers';
+import { fetchLatestOffers } from '@/lib/offers';
 
 function parsePrice(value?: string): number | null {
   if (!value) return null;
@@ -29,17 +29,12 @@ function formatValidUntil(endsAt?: string): string {
 }
 
 export default async function Home() {
-  const rails = await fetchOfferRails();
+  const latest = await fetchLatestOffers(5);
 
-  // Heuristics to choose the weekly rail. Prefer explicit id, then title match, then first non-empty rail.
-  const weeklyRail =
-    rails.find((r) => r.id === 'weekly-offers') ||
-    rails.find((r) => /viikon|weekly/i.test(r.title)) ||
-    rails.find((r) => r.offers.length > 0);
-
-  const weeklyOffers = (weeklyRail?.offers ?? []).map((o) => ({
+  const weeklyOffers = latest.map((o) => ({
     id: o.id,
     title: o.product,
+    description: o.description,
     location: o.location,
     imageSrc: o.imageSrc,
     imageAlt: o.imageAlt,
