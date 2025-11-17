@@ -8,6 +8,7 @@ import { getSupabaseAdminClient } from '@/lib/supabaseClient';
 import OfferForm from './OfferForm';
 import LoginForm from './LoginForm';
 import CategoryForm from './CategoryForm';
+import ManageOffers from './ManageOffers';
 import type { ActionState } from './actionTypes';
 import styles from './page.module.css';
 
@@ -200,6 +201,70 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
   return { success: true, message: 'Tarjous lisätty' };
 };
 
+const deleteOfferAction = async (_state: ActionState, formData: FormData): Promise<ActionState> => {
+  'use server';
+
+  const store = await cookies();
+  if (!(await hasValidSession(store))) {
+    return { success: false, message: 'Kirjaudu ensin sisään' };
+  }
+
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    return { success: false, message: 'Supabase ei ole konfiguroitu' };
+  }
+
+  const offerId = formData.get('offerId')?.toString().trim();
+  if (!offerId) {
+    return { success: false, message: 'Tarjouksen tunnus puuttuu' };
+  }
+
+  const { error } = await supabase.from('offer_items').delete().eq('id', offerId);
+  if (error) {
+    console.error('Supabase delete offer error', error);
+    return { success: false, message: 'Tarjouksen poisto epäonnistui' };
+  }
+
+  revalidatePath('/hallinta/uusi-tarjous');
+  revalidatePath('/tarjoukset');
+  return { success: true, message: 'Tarjous poistettu' };
+};
+
+const deleteCategoryAction = async (_state: ActionState, formData: FormData): Promise<ActionState> => {
+  'use server';
+
+  const store = await cookies();
+  if (!(await hasValidSession(store))) {
+    return { success: false, message: 'Kirjaudu ensin sisään' };
+  }
+
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    return { success: false, message: 'Supabase ei ole konfiguroitu' };
+  }
+
+  const categoryId = formData.get('categoryId')?.toString().trim();
+  if (!categoryId) {
+    return { success: false, message: 'Kategorian tunnus puuttuu' };
+  }
+
+  const { error: offersError } = await supabase.from('offer_items').delete().eq('rail_id', categoryId);
+  if (offersError) {
+    console.error('Supabase delete offers in category error', offersError);
+    return { success: false, message: 'Tarjousten poisto kategoriasta epäonnistui' };
+  }
+
+  const { error } = await supabase.from('offer_rails').delete().eq('id', categoryId);
+  if (error) {
+    console.error('Supabase delete category error', error);
+    return { success: false, message: 'Kategorian poisto epäonnistui' };
+  }
+
+  revalidatePath('/hallinta/uusi-tarjous');
+  revalidatePath('/tarjoukset');
+  return { success: true, message: 'Kategoria poistettu' };
+};
+
 export default async function NewOfferPage() {
   const store = await cookies();
   const creds = getAdminCredentials();
@@ -220,6 +285,11 @@ export default async function NewOfferPage() {
         <>
           <CategoryForm action={createCategoryAction} />
           <OfferForm rails={rails} action={createOfferAction} />
+          <ManageOffers
+            rails={rails}
+            deleteOfferAction={deleteOfferAction}
+            deleteCategoryAction={deleteCategoryAction}
+          />
           <div className={styles.logoutRow}>
             <form action={logoutAction}>
               <button type="submit" className={styles.secondaryButton}>

@@ -36,7 +36,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
       <h2 className={styles.sectionTitle}>Lisää uusi tarjous</h2>
       {noCategories && (
         <p className={styles.error}>
-          Yhtään kategoriaa ei löytynyt. Lisää kategoria Supabasen <code>offer_rails</code> tauluun ennen ensimmäistä tarjousta.
+          Yhtään kategoriaa ei löytynyt.
         </p>
       )}
       <div className={styles.fieldGrid}>

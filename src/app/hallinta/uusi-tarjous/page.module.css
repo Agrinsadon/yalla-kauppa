@@ -15,7 +15,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
 }
 
 .sectionTitle {
@@ -59,7 +58,6 @@
 .select:focus {
   outline: none;
   border-color: #e30613;
-  box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.15);
 }
 
 .textarea {
@@ -154,6 +152,105 @@
 .logoutRow {
   display: flex;
   justify-content: flex-end;
+}
+
+.muted {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.manageList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.manageCard {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 1rem;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.manageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.manageTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.inlineForm {
+  margin: 0;
+}
+
+.dangerButton {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid rgba(248, 113, 113, 0.6);
+  border-radius: 999px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dangerButton:hover {
+  background: #fee2e2;
+  transform: translateY(-1px);
+}
+
+.offerList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.offerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.offerRow:first-child {
+  border-top: none;
+}
+
+.offerTitle {
+  margin: 0;
+  font-weight: 600;
+}
+
+.dangerGhostButton {
+  background: transparent;
+  color: #b91c1c;
+  border: 1px solid rgba(248, 113, 113, 0.6);
+  border-radius: 12px;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dangerGhostButton:hover {
+  background: #fef2f2;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 640px) {

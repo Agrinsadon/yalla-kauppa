@@ -1,5 +1,5 @@
 import type { OfferRail, StoreOffer } from '@/types/offers';
-import { getSupabaseClient } from './supabaseClient';
+import { getSupabaseAdminClient, getSupabaseClient } from './supabaseClient';
 
 type OfferRailRow = {
   id: string;
@@ -22,6 +22,34 @@ type OfferRailRow = {
   sort_order?: number | null;
 };
 
+function todayIsoDate() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().slice(0, 10);
+}
+
+function normalizeDate(value?: string | null) {
+  return value ? value.slice(0, 10) : null; // yyyy-mm-dd
+}
+
+export async function purgeExpiredOffers() {
+  const admin = getSupabaseAdminClient();
+  if (!admin) return;
+
+  const cutoff = todayIsoDate();
+  const { error } = await admin.from('offer_items').delete().lt('ends_at', cutoff);
+  if (error) {
+    console.error('Supabase purgeExpiredOffers error', error);
+  }
+}
+
+function isOfferActive(row: OfferRailRow['offers'][number]) {
+  const end = normalizeDate(row.ends_at);
+  const today = todayIsoDate();
+
+  if (end && end < today) return false;
+  return true;
+}
 
 function mapStoreOffer(row: OfferRailRow['offers'][number]): StoreOffer {
   return {
@@ -43,6 +71,8 @@ export async function fetchLatestOffers(limit: number = 5): Promise<StoreOffer[]
   const supabase = getSupabaseClient();
   if (!supabase) return [];
 
+  await purgeExpiredOffers();
+
   // Try created_at; fallback to id desc if column missing (handled by error)
   const { data, error } = await supabase
     .from('offer_items')
@@ -63,10 +93,10 @@ export async function fetchLatestOffers(limit: number = 5): Promise<StoreOffer[]
       .order('id', { ascending: false })
       .limit(limit);
     if (fallback.error || !fallback.data) return [];
-    return fallback.data.map(mapStoreOffer);
+    return fallback.data.filter(isOfferActive).map(mapStoreOffer);
   }
 
-  return (data ?? []).map(mapStoreOffer);
+  return (data ?? []).filter(isOfferActive).map(mapStoreOffer);
 }
 
 
@@ -80,6 +110,8 @@ export async function fetchOfferRails(
   const { includeEmpty = false } = options;
   const supabase = getSupabaseClient();
   if (!supabase) return [];
+
+  await purgeExpiredOffers();
 
   const { data, error } = await supabase
     .from('offer_rails')
@@ -108,16 +140,15 @@ export async function fetchOfferRails(
     return [];
   }
 
-  const mapped = (data as OfferRailRow[])
-    .map((row) => ({
-      id: row.id,
-      title: row.title,
-      description: row.description,
-      offers: (row.offers ?? [])
-        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
-        .map(mapStoreOffer),
-    }));
+  const mapped = (data as OfferRailRow[]).map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    offers: (row.offers ?? [])
+      .filter(isOfferActive)
+      .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+      .map(mapStoreOffer),
+  }));
 
   return includeEmpty ? mapped : mapped.filter((rail) => rail.offers.length > 0);
 }
-

@@ -28,6 +28,8 @@ function formatValidUntil(endsAt?: string): string {
   return `Voimassa ${d.toLocaleDateString('fi-FI')}`;
 }
 
+export const revalidate = 0;
+
 export default async function Home() {
   const latest = await fetchLatestOffers(5);
 

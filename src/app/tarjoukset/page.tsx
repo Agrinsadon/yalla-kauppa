@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { fetchOfferRails } from '@/lib/offers';
 import styles from './page.module.css';
 import RailShowcase from './RailShowcase';
+import Contact from '@/components/Contact';
 
 type HeroHighlight = {
   id: string;
@@ -11,7 +12,7 @@ type HeroHighlight = {
 
 const heroHighlights: HeroHighlight[] = [
   { id: 'drop', label: 'Uudet tarjoukset', value: '2x viikossa' },
-  { id: 'cards', label: 'Kortteja', value: '15+ tuotetta' },
+  { id: 'cards', label: 'Kortteja', value: '1000+ tuotetta' },
   { id: 'availability', label: 'Saatavuus', value: 'Kaikki Yalla-myymälät' },
 ];
 
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   title: 'Tarjoukset - Yalla Kauppa',
   description: 'Tutustu Yalla Kaupan ajankohtaisiin tarjouksiin ja löydä parhaat löydöt.',
 };
+
+export const revalidate = 0;
 
 export default async function TarjouksetPage() {
   const offerRails = await fetchOfferRails({ includeEmpty: true });
@@ -29,7 +32,7 @@ export default async function TarjouksetPage() {
         <p className={styles.eyebrow}>Yalla Kauppa • Ajankohtaiset tarjoukset</p>
         <h1 className={styles.title}>Täydelliset tarjoukset jokaiseen ruokapöytään</h1>
         <p className={styles.subtitle}>
-          Kuratoitu tarjouskokonaisuus, jossa jokainen kortti tuo esiin tuotteen kuvan, hinnat ja
+          Kuratoitu tarjouskokonaisuus, jossa jokainen tuote tuo esiin tuotteen kuvan, hinnat ja
           sijainnin. Inspiroidu ja nappaa suosikit saman tien.
         </p>
         <div className={styles.heroHighlights}>
@@ -49,6 +52,7 @@ export default async function TarjouksetPage() {
       ) : (
         <RailShowcase rails={offerRails} />
       )}
+      <Contact />
     </div>
   );
 }
