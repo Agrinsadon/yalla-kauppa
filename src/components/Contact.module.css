@@ -134,20 +134,102 @@
 
 .submitButton {
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   background-color: #e30613;
   color: #ffffff;
   border: none;
-  padding: 0.9rem 2.4rem;
+  padding: 0.9rem 1.4rem 0.9rem 1.1rem;
   font-size: 1rem;
   font-weight: 700;
   border-radius: 20px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .submitButton:hover {
   background-color: #c90510;
   transform: translateY(-2px);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fileInputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fileButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.fileButton:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.fileHint {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.hiddenFile {
+  display: none;
+}
+
+.clearFileButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #b91c1c;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.clearFileButton:hover {
+  background: #fef2f2;
+  transform: translateY(-1px);
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.status {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.statusSuccess {
+  color: #059669;
+}
+
+.statusError {
+  color: #b91c1c;
 }
 
 .responseTime {

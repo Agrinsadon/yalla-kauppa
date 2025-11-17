@@ -1,4 +1,6 @@
 import styles from './Contact.module.css';
+import ContactFormClient from './ContactFormClient';
+import { sendContactEmail } from '@/app/actions/contactActions';
 
 export default function Contact() {
   return (
@@ -22,49 +24,7 @@ Voit myös antaa palautetta tai tehdä reklamaation vaivattomasti tämän lomakk
           </div>
 
           <div className={styles.formColumn} aria-labelledby="contact-form-heading">
-            <form className={styles.form}>
-              <div className={styles.field}>
-                <label htmlFor="contact-name" className={styles.label}>
-                  Nimi*
-                </label>
-                <input
-                  id="contact-name"
-                  name="name"
-                  type="text"
-                  placeholder="Etunimi ja sukunimi"
-                  required
-                  className={styles.input}
-                />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="contact-email" className={styles.label}>
-                  Sähköposti*
-                </label>
-                <input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  placeholder="esimerkki@email.com"
-                  required
-                  className={styles.input}
-                />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="contact-message" className={styles.label}>
-                  Viesti*
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  placeholder="Kerro tarkemmin, miten voimme auttaa"
-                  required
-                  className={`${styles.input} ${styles.textarea}`}
-                />
-              </div>
-              <button type="submit" className={styles.submitButton}>
-                Lähetä viesti
-              </button>
-            </form>
+            <ContactFormClient action={sendContactEmail} />
           </div>
         </div>
       </div>
