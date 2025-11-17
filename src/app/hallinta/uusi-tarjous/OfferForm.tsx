@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import type { OfferRail } from '@/types/offers';
 import type { ActionState } from './actionTypes';
 import styles from './page.module.css';
@@ -19,6 +19,16 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
   const noCategories = rails.length === 0;
   const [priceValue, setPriceValue] = useState<string>('');
   const [badgeValue, setBadgeValue] = useState<string>('');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
+      setImageMode('upload');
+      setPriceValue('');
+      setBadgeValue('');
+    }
+  }, [state.success]);
 
   const computeBadgeFromPrice = (price: number): string => {
     if (Number.isNaN(price) || price <= 0) return '';
@@ -32,7 +42,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
   };
 
   return (
-    <form className={styles.panel} action={formAction}>
+    <form ref={formRef} className={styles.panel} action={formAction}>
       <h2 className={styles.sectionTitle}>Lisää uusi tarjous</h2>
       {noCategories && (
         <p className={styles.error}>

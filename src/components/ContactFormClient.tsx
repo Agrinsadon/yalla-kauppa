@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Paperclip, Send, X } from 'lucide-react';
 import type { ContactFormState } from '@/app/actions/contactActions';
@@ -11,6 +11,7 @@ type ContactFormClientProps = {
 };
 
 const initialState: ContactFormState = { success: false };
+const defaultFileLabel = '';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -24,10 +25,18 @@ function SubmitButton() {
 
 export default function ContactFormClient({ action }: ContactFormClientProps) {
   const [state, formAction] = useActionState(action, initialState);
-  const [fileLabel, setFileLabel] = useState<string>('');
+  const [fileLabel, setFileLabel] = useState<string>(defaultFileLabel);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
+      setFileLabel(defaultFileLabel);
+    }
+  }, [state.success]);
 
   return (
-    <form className={styles.form} action={formAction} encType="multipart/form-data">
+    <form ref={formRef} className={styles.form} action={formAction} encType="multipart/form-data">
       <div className={styles.field}>
         <label htmlFor="contact-name" className={styles.label}>
           Nimi*
@@ -80,17 +89,17 @@ export default function ContactFormClient({ action }: ContactFormClientProps) {
             className={styles.hiddenFile}
             onChange={(e) => {
               const file = e.target.files?.[0];
-              setFileLabel(file ? file.name : '');
+              setFileLabel(file ? file.name : defaultFileLabel);
             }}
           />
-          {fileLabel !== '' && (
+          {fileLabel !== defaultFileLabel && (
             <button
               type="button"
               className={styles.clearFileButton}
               onClick={() => {
                 const input = document.getElementById('contact-attachment') as HTMLInputElement | null;
                 if (input) input.value = '';
-                setFileLabel('');
+                setFileLabel(defaultFileLabel);
               }}
               aria-label="Poista liite"
             >

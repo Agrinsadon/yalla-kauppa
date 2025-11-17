@@ -1,6 +1,7 @@
 'use server';
 
 import nodemailer from 'nodemailer';
+import path from 'path';
 
 const MAX_ATTACHMENT_BYTES = 3 * 1024 * 1024; // 3 MB
 
@@ -38,12 +39,15 @@ export async function sendContactEmail(
     },
   });
 
+  const logoCid = 'yalla-logo@cid';
+  const logoImgTag = `<img src="cid:${logoCid}" alt="Yalla Kauppa" style="height:36px;width:auto;display:block;" />`;
+
   const subject = `Yhteydenotto: ${name}`;
   const text = `Nimi: ${name}\nSähköposti: ${email}\n\nViesti:\n${message}`;
   const html = `
     <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
-      <div style="margin-bottom: 12px;">
-        <span style="display:inline-block;padding:6px 10px;border-radius:12px;background:#fef2f2;color:#b91c1c;font-weight:700;">Yalla Kauppa</span>
+      <div style="margin-bottom: 12px; display:flex; align-items:center; gap:10px;">
+        ${logoImgTag}
       </div>
       <h2 style="margin: 0 0 12px;">Uusi yhteydenotto</h2>
       <p style="margin: 4px 0;"><strong>Nimi:</strong> ${name}</p>
@@ -52,24 +56,6 @@ export async function sendContactEmail(
       <div style="padding: 12px; border-left: 4px solid #e30613; background:#f9fafb;">
         ${message.replace(/\n/g, '<br/>')}
       </div>
-    </div>
-  `;
-
-  const ackSubject = 'Kiitos yhteydenotostasi – palaamme pian';
-  const ackText = `Hei ${name},\n\nKiitos viestistäsi! Olemme vastaanottaneet sen ja palaamme asiaan pian.\n\nYstävällisin terveisin,\nYalla Kauppa\n—\nTämä on automaattinen kuittaus viestistäsi:\n${message}`;
-  const ackHtml = `
-    <div style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.7; padding: 18px; border: 1px solid #e5e7eb; border-radius: 14px; background: linear-gradient(135deg, #fff5f5 0%, #ffffff 60%);">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-        <span style="display:inline-block;padding:6px 10px;border-radius:12px;background:#e30613;color:#fff;font-weight:700;">Yalla Kauppa</span>
-        <span style="color:#b91c1c;font-weight:600;">Kiitos yhteydenotosta</span>
-      </div>
-      <p style="margin: 8px 0;">Hei ${name},</p>
-      <p style="margin: 8px 0;">Kiitos viestistäsi! Olemme vastaanottaneet sen ja palaamme asiaan pian.</p>
-      <p style="margin: 8px 0; font-weight: 600;">Viestisi:</p>
-      <div style="margin: 8px 0 16px; padding: 12px; border-left: 4px solid #e30613; background:#fff7f7; border-radius: 8px;">
-        ${message.replace(/\n/g, '<br/>')}
-      </div>
-      <p style="margin: 8px 0;">Ystävällisin terveisin,<br/><strong>Yalla Kauppa</strong></p>
     </div>
   `;
 
@@ -88,6 +74,37 @@ export async function sendContactEmail(
       ];
     }
 
+    const logoAttachment = {
+      filename: 'yalla.png',
+      path: path.join(process.cwd(), 'public', 'yalla.png'),
+      cid: logoCid,
+    };
+
+    const ackSubject = 'Kiitos yhteydenotostasi – palaamme pian';
+    const attachmentNames = attachments?.map((att) => att.filename).filter(Boolean) ?? [];
+    const ackAttachmentNote = attachmentNames.length
+      ? `\nLiitteenä mukana: ${attachmentNames.join(', ')}`
+      : '';
+    const ackText = `Hei ${name},\n\nKiitos viestistäsi! Olemme vastaanottaneet sen ja palaamme asiaan pian.\n\nYstävällisin terveisin,\nYalla Kauppa\n—\nTämä on automaattinen kuittaus viestistäsi:\n${message}${ackAttachmentNote}`;
+    const ackHtml = `
+      <div style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.7; padding: 18px; border: 1px solid #e5e7eb; border-radius: 14px; background: linear-gradient(135deg, #fff5f5 0%, #ffffff 60%);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">${logoImgTag}</div>
+        <p style="margin: 8px 0;">Hei ${name},</p>
+        <p style="margin: 8px 0;">Kiitos viestistäsi! Olemme vastaanottaneet sen ja palaamme asiaan pian.</p>
+        <p style="margin: 8px 0; font-weight: 600;">Viestisi:</p>
+        <div style="margin: 8px 0 16px; padding: 12px; border-left: 4px solid #e30613; background:#fff7f7; border-radius: 8px;">
+          ${message.replace(/\n/g, '<br/>')}
+        </div>
+        ${
+          attachmentNames.length
+            ? `<p style="margin: 8px 0;"><strong>Liitteenä:</strong> ${attachmentNames.join(', ')}</p>`
+            : ''
+        }
+        <p style="margin: 8px 0;">Ystävällisin terveisin,<br/><strong>Yalla Kauppa</strong></p>
+      </div>
+    `;
+    const combinedAttachments = [logoAttachment, ...(attachments ?? [])];
+
     await Promise.all([
       transporter.sendMail({
         from: gmailUser,
@@ -96,7 +113,7 @@ export async function sendContactEmail(
         text,
         html,
         replyTo: email,
-        attachments,
+        attachments: combinedAttachments,
       }),
       transporter.sendMail({
         from: gmailUser,
@@ -104,6 +121,7 @@ export async function sendContactEmail(
         subject: ackSubject,
         text: ackText,
         html: ackHtml,
+        attachments: combinedAttachments,
       }),
     ]);
     return { success: true, message: 'Kiitos viestistäsi! Otamme yhteyttä pian.' };
