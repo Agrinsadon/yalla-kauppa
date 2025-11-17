@@ -1,11 +1,9 @@
 .hero {
-  background-color: #ffffff;
-  min-height: calc(100vh - 80px);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, rgba(255, 245, 245, 1) 65%, rgba(255, 228, 228, 1) 100%);
+  min-height: calc(118vh - 80px);
   display: flex;
   align-items: center;
-  padding: 4rem 0;
 }
-
 .container {
   max-width: 1280px;
   margin: 0 auto;

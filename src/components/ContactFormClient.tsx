@@ -24,7 +24,7 @@ function SubmitButton() {
 
 export default function ContactFormClient({ action }: ContactFormClientProps) {
   const [state, formAction] = useActionState(action, initialState);
-  const [fileLabel, setFileLabel] = useState<string>('Ei liitettä');
+  const [fileLabel, setFileLabel] = useState<string>('');
 
   return (
     <form className={styles.form} action={formAction} encType="multipart/form-data">
@@ -80,17 +80,17 @@ export default function ContactFormClient({ action }: ContactFormClientProps) {
             className={styles.hiddenFile}
             onChange={(e) => {
               const file = e.target.files?.[0];
-              setFileLabel(file ? file.name : 'Ei liitettä');
+              setFileLabel(file ? file.name : '');
             }}
           />
-          {fileLabel !== 'Ei liitettä' && (
+          {fileLabel !== '' && (
             <button
               type="button"
               className={styles.clearFileButton}
               onClick={() => {
                 const input = document.getElementById('contact-attachment') as HTMLInputElement | null;
                 if (input) input.value = '';
-                setFileLabel('Ei liitettä');
+                setFileLabel('');
               }}
               aria-label="Poista liite"
             >

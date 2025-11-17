@@ -1,7 +1,7 @@
 .wrapper {
   max-width: 960px;
   margin: 0 auto;
-  padding: 4rem 2rem 6rem;
+  padding: 100px 2rem 6rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -255,6 +255,6 @@
 
 @media (max-width: 640px) {
   .wrapper {
-    padding: 3rem 1.25rem 4rem;
+    padding: 100px 0.5rem 4rem;
   }
 }
