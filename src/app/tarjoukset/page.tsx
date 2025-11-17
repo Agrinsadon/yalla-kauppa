@@ -32,14 +32,6 @@ export default async function TarjouksetPage() {
           Kuratoitu tarjouskokonaisuus, jossa jokainen kortti tuo esiin tuotteen kuvan, hinnat ja
           sijainnin. Inspiroidu ja nappaa suosikit saman tien.
         </p>
-        <div className={styles.ctaRow}>
-          <a className={styles.primaryCta} href="/myymalat">
-            Löydä lähin myymälä
-          </a>
-          <a className={styles.secondaryCta} href="#tarjouskategoriat">
-            Selaa tämän viikon kortit
-          </a>
-        </div>
         <div className={styles.heroHighlights}>
           {heroHighlights.map((highlight) => (
             <div key={highlight.id} className={styles.highlightCard}>

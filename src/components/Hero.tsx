@@ -11,11 +11,11 @@ export default function Hero() {
         <div className={styles.content}>
           <div className={styles.textSection}>
             <h1 className={styles.title}>
-              Tervetuloa Yallaan
+              Löydä laadukkaat elintarvikkeet ja ainutlaatuiset herkut
             </h1>
             <p className={styles.subtitle}>
-              Suomen parhaat ruuat ja tuoreimmat tuotteet suoraan kotiovellesi. 
-              Löydämme sinulle parhaat tuotteet parhaasta hinnasta.
+              Löydä laaja valikoima erikoistuotteita ja viikon parhaat
+              tarjoukset.
             </p>
             <div className={styles.ctaButtons}>
               <Link href="/tarjoukset" className={styles.primaryButton}>

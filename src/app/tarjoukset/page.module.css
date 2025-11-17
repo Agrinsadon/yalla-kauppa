@@ -49,48 +49,6 @@
   max-width: 720px;
 }
 
-.ctaRow {
-  margin: 2rem 0 2.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.primaryCta,
-.secondaryCta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  padding: 0.95rem 1.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-.primaryCta {
-  background-color: #e30613;
-  color: #ffffff;
-  box-shadow: 0 18px 40px rgba(227, 6, 19, 0.25);
-}
-
-.primaryCta:hover {
-  transform: translateY(-2px);
-}
-
-.secondaryCta {
-  border: 1px solid rgba(17, 24, 39, 0.2);
-  color: #111111;
-  background-color: #ffffff;
-}
-
-.secondaryCta:hover {
-  border-color: #e30613;
-  color: #e30613;
-  background-color: rgba(227, 6, 19, 0.05);
-}
-
-
 .heroHighlights {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
