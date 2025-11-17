@@ -28,7 +28,7 @@
 }
 
 .kicker {
-  font-size: 1.2rem;
+  font-size: clamp(1.05rem, 0.7vw + 1rem, 1.2rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   padding-bottom: 1rem;
@@ -37,7 +37,7 @@
 }
 
 .description {
-  font-size: 1.0625rem;
+  font-size: clamp(1rem, 0.6vw + 0.95rem, 1.1rem);
   line-height: 1.7;
   color: #4b5563;
   margin: 0;
@@ -63,7 +63,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-size: 0.95rem;
+  font-size: clamp(0.93rem, 0.4vw + 0.89rem, 1rem);
   color: #374151;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .label {
-  font-size: 0.75rem;
+  font-size: clamp(0.78rem, 0.3vw + 0.74rem, 0.85rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -129,7 +129,7 @@
 .textarea {
   padding-bottom: 0.1rem;
   resize: none;
-  font-size: 0.93rem;
+  font-size: clamp(0.94rem, 0.3vw + 0.9rem, 1rem);
 }
 
 .submitButton {
@@ -185,7 +185,7 @@
 
 .fileHint {
   color: #6b7280;
-  font-size: 0.9rem;
+  font-size: clamp(0.88rem, 0.3vw + 0.84rem, 0.96rem);
 }
 
 .hiddenFile {
@@ -220,7 +220,7 @@
 
 .status {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: clamp(0.93rem, 0.4vw + 0.88rem, 1rem);
   font-weight: 600;
 }
 
@@ -234,7 +234,7 @@
 
 .responseTime {
   margin: 2rem 0 0;
-  font-size: 0.875rem;
+  font-size: clamp(0.85rem, 0.3vw + 0.82rem, 0.95rem);
   line-height: 1.6;
   color: #6b7280;
 }
@@ -262,7 +262,7 @@
   }
 
   .heading {
-    font-size: 2.25rem;
+    font-size: 2.15rem;
   }
 
   .formColumn {
@@ -285,6 +285,6 @@
   }
 
   .description {
-    font-size: 1rem;
+    font-size: 0.98rem;
   }
 }

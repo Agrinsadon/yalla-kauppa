@@ -33,7 +33,7 @@ export default async function TarjouksetPage() {
         <h1 className={styles.title}>Täydelliset tarjoukset jokaiseen ruokapöytään</h1>
         <p className={styles.subtitle}>
           Kuratoitu tarjouskokonaisuus, jossa jokainen tuote tuo esiin tuotteen kuvan, hinnat ja
-          sijainnin. Inspiroidu ja nappaa suosikit saman tien.
+          sijainnin.
         </p>
         <div className={styles.heroHighlights}>
           {heroHighlights.map((highlight) => (
