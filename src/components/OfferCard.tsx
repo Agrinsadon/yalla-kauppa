@@ -17,6 +17,13 @@ function formatDate(iso?: string) {
 }
 
 export default function OfferCard({ offer, showDescription = true }: OfferCardProps) {
+  const chipLocations =
+    offer.locations && offer.locations.length > 0
+      ? offer.locations
+      : offer.location
+        ? [offer.location]
+        : [];
+
   return (
     <article className={styles.offerCard}>
       <div className={styles.offerImageWrapper}>
@@ -38,9 +45,19 @@ export default function OfferCard({ offer, showDescription = true }: OfferCardPr
             aria-hidden="true"
           />
         )}
-        <span className={styles.locationBadge}>{offer.location}</span>
         {offer.badge && <span className={styles.offerDiscount}>{offer.badge}</span>}
       </div>
+      {chipLocations.length > 0 && (
+        <div className={styles.offerMeta}>
+          <div className={styles.locationChipList}>
+            {chipLocations.map((location) => (
+              <span key={location} className={styles.locationChip}>
+                {location}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
       <div className={styles.offerCardBody}>
         <p className={styles.offerProduct}>{offer.product}</p>
         {showDescription && (

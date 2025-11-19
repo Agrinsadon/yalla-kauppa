@@ -12,6 +12,8 @@ type OfferFormProps = {
 };
 
 const initialState: ActionState = { success: false };
+const ALL_STORES_VALUE = '__ALL_STORES__';
+const ALL_STORES_LABEL = 'Kaikki myymälät';
 
 export default function OfferForm({ rails, action }: OfferFormProps) {
   const [state, formAction] = useActionState(action, initialState);
@@ -19,6 +21,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
   const noCategories = rails.length === 0;
   const [priceValue, setPriceValue] = useState<string>('');
   const [badgeValue, setBadgeValue] = useState<string>('');
+  const [selectedStores, setSelectedStores] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -27,8 +30,30 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
       setImageMode('upload');
       setPriceValue('');
       setBadgeValue('');
+      setSelectedStores([]);
     }
   }, [state.success]);
+
+  const toggleStoreSelection = (value: string) => {
+    setSelectedStores((prev) => {
+      if (value === ALL_STORES_VALUE) {
+        return prev.includes(ALL_STORES_VALUE) ? [] : [ALL_STORES_VALUE];
+      }
+
+      const withoutAll = prev.filter((item) => item !== ALL_STORES_VALUE);
+      if (withoutAll.includes(value)) {
+        return withoutAll.filter((item) => item !== value);
+      }
+      return [...withoutAll, value];
+    });
+  };
+
+  const storesDisabled = selectedStores.includes(ALL_STORES_VALUE);
+
+  const checkboxClass = (value: string) =>
+    selectedStores.includes(value)
+      ? `${styles.checkboxPill} ${styles.checkboxPillActive}`
+      : styles.checkboxPill;
 
   const computeBadgeFromPrice = (price: number): string => {
     if (Number.isNaN(price) || price <= 0) return '';
@@ -57,17 +82,35 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
           <input id="product" name="product" className={styles.input} required />
         </div>
         <div className={styles.fieldGroup}>
-          <label htmlFor="location" className={styles.label}>
-            Myymälä / sijainti
-          </label>
-          <select id="location" name="location" className={styles.select} required>
-            <option value="">Valitse myymälä</option>
-            {stores.map((s) => (
-              <option key={s.id} value={s.name}>
-                {s.name}
-              </option>
+          <span className={styles.label}>Myymälät</span>
+          <p className={styles.helperText}>
+            Valitse yksi tai useampi myymälä. Voit myös valita "Kaikki myymälät" jos tarjous koskee kaikkia.
+          </p>
+          <div className={styles.checkboxGroup}>
+            <label className={checkboxClass(ALL_STORES_VALUE)}>
+              <input
+                type="checkbox"
+                name="location"
+                value={ALL_STORES_VALUE}
+                checked={selectedStores.includes(ALL_STORES_VALUE)}
+                onChange={() => toggleStoreSelection(ALL_STORES_VALUE)}
+              />
+              <span className={styles.checkboxLabelText}>{ALL_STORES_LABEL}</span>
+            </label>
+            {stores.map((store) => (
+              <label key={store.id} className={checkboxClass(store.name)}>
+                <input
+                  type="checkbox"
+                  name="location"
+                  value={store.name}
+                  checked={selectedStores.includes(store.name)}
+                  disabled={storesDisabled}
+                  onChange={() => toggleStoreSelection(store.name)}
+                />
+                <span className={styles.checkboxLabelText}>{store.name}</span>
+              </label>
             ))}
-          </select>
+          </div>
         </div>
       </div>
 
