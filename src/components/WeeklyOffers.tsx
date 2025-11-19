@@ -22,6 +22,7 @@ function OfferCardWrapper({ offer }: OfferCardProps) {
     price: offer.price,
     originalPrice: offer.originalPrice,
     location: offer.location,
+    locations: offer.location ? [offer.location] : [],
     badge: offer.discount,
     startsAt: offer.startsAt,
     endsAt: offer.endsAt,

@@ -22,22 +22,22 @@ export default function About() {
   const features = [
     {
       icon: <BadgeCheck size={40} />,
-      title: 'Halal Tuotteet',
+      title: 'HALAL TUOTTEET',
       description: 'Laaja valikoima sertifioituja halal-tuotteita',
     },
     {
       icon: <ChefHat size={40} />,
-      title: 'Tuoreet Leivät',
+      title: 'TUOREET LEIVÄT',
       description: 'Päivittäin tuoreet leivät kaikkiin myymäliin',
     },
     {
       icon: <Salad size={40} />,
-      title: 'Tuoreet Vihannekset',
+      title: 'TUOREET VIHANNEKSET',
       description: 'Valikoimassamme on päivittäin tuoreita vihanneksia ja hedelmiä',
     },
     {
       icon: <Users size={40} />,
-      title: 'Perheyritys',
+      title: 'PERHEYRITYS',
       description: 'Yalla on perheyritys, joka jakaa arvoja ja rakastaa asiakkaitaan',
     },
   ];

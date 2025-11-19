@@ -77,21 +77,10 @@
 }
 
 .checkboxGroup {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.85rem;
-  overflow-x: auto;
   padding: 0.5rem 0 0.85rem;
-  scroll-snap-type: x proximity;
-}
-
-.checkboxGroup::-webkit-scrollbar {
-  height: 6px;
-}
-
-.checkboxGroup::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.2);
-  border-radius: 999px;
 }
 
 .checkboxPill {
@@ -105,9 +94,8 @@
   background: #ffffff;
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  flex: 0 0 220px;
-  min-height: 72px;
-  scroll-snap-align: start;
+  width: 100%;
+  min-height: 84px;
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
 }
 
@@ -322,7 +310,7 @@
     padding: 100px 0.5rem 4rem;
   }
 
-  .checkboxPill {
-    flex: 0 0 180px;
+  .checkboxGroup {
+    grid-template-columns: 1fr;
   }
 }

@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 };
 
 const SESSION_COOKIE = 'yk-admin-session';
+const ALL_STORES_VALUE = '__ALL_STORES__';
 
 type CookieStore = Awaited<ReturnType<typeof cookies>>;
 
@@ -148,13 +149,18 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
   const imageAlt = formData.get('imageAlt')?.toString().trim();
   const price = formData.get('price')?.toString().trim();
   const originalPrice = formData.get('originalPrice')?.toString().trim();
-  const location = formData.get('location')?.toString().trim();
+  const locationEntries = formData.getAll('location')
+    .map((value) => value?.toString().trim())
+    .filter((value): value is string => Boolean(value && value.length > 0));
+  const locations = locationEntries.includes(ALL_STORES_VALUE)
+    ? ['Kaikki myymälät']
+    : Array.from(new Set(locationEntries));
   const badge = formData.get('badge')?.toString().trim();
   const categoryId = formData.get('categoryId')?.toString().trim();
   const startsAt = formData.get('startsAt')?.toString() || null;
   const endsAt = formData.get('endsAt')?.toString() || null;
 
-  if (!product || !description || !price || !originalPrice || !location || !categoryId) {
+  if (!product || !description || !price || !originalPrice || locations.length === 0 || !categoryId) {
     return { success: false, message: 'Täytä kaikki pakolliset kentät' };
   }
 
@@ -185,7 +191,7 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
     image_alt: imageAlt,
     price,
     original_price: originalPrice,
-    location,
+    location: JSON.stringify(locations),
     badge: badge || null,
     starts_at: startsAt,
     ends_at: endsAt,

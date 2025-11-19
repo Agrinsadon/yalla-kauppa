@@ -32,6 +32,24 @@ function normalizeDate(value?: string | null) {
   return value ? value.slice(0, 10) : null; // yyyy-mm-dd
 }
 
+function parseLocations(raw?: string | null): string[] {
+  if (!raw) return [];
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed
+        .map((entry) => (typeof entry === 'string' ? entry.trim() : ''))
+        .filter((entry): entry is string => entry.length > 0);
+    }
+  } catch (error) {
+    // Treat value as a simple string when JSON parsing fails
+  }
+
+  const fallback = raw.toString().trim();
+  return fallback ? [fallback] : [];
+}
+
 export async function purgeExpiredOffers() {
   const admin = getSupabaseAdminClient();
   if (!admin) return;
@@ -52,6 +70,14 @@ function isOfferActive(row: OfferRailRow['offers'][number]) {
 }
 
 function mapStoreOffer(row: OfferRailRow['offers'][number]): StoreOffer {
+  const locations = parseLocations(row.location);
+  const locationLabel =
+    locations.length === 0
+      ? ''
+      : locations.includes('Kaikki myymälät')
+        ? 'Kaikki myymälät'
+        : locations.join(', ');
+
   return {
     id: row.id,
     product: row.product,
@@ -60,7 +86,8 @@ function mapStoreOffer(row: OfferRailRow['offers'][number]): StoreOffer {
     imageAlt: row.image_alt,
     price: row.price,
     originalPrice: row.original_price,
-    location: row.location,
+    location: locationLabel,
+    locations,
     badge: row.badge ?? undefined,
     startsAt: row.starts_at ?? undefined,
     endsAt: row.ends_at ?? undefined,

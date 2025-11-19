@@ -242,25 +242,19 @@
   object-fit: cover;
 }
 
-.offerMeta {
-  padding: 0.85rem 1.5rem 0;
-}
-
 .locationChipList {
   display: flex;
   gap: 0.85rem;
   overflow-x: auto;
-  padding: 0.35rem 0.15rem 0.5rem;
-  scroll-snap-type: x proximity;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .locationChipList::-webkit-scrollbar {
-  height: 6px;
-}
-
-.locationChipList::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.15);
-  border-radius: 999px;
+  display: none;
 }
 
 .locationChip {

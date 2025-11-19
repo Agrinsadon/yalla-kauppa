@@ -7,6 +7,7 @@ export type StoreOffer = {
   price: string;
   originalPrice: string;
   location: string;
+  locations: string[];
   badge?: string;
   startsAt?: string;
   endsAt?: string;
@@ -40,4 +41,3 @@ export type WeeklyOffer = {
   startsAt?: string;
   endsAt?: string;
 };
-

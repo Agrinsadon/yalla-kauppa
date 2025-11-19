@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import styles from './BrandRibbon.module.css';
 
@@ -42,6 +40,9 @@ const partnerLogos = [
   { name: 'Zeeba', src: '/zeeba.jpeg' },
 ];
 
+const marqueeLogos = [...partnerLogos, ...partnerLogos];
+const PRIORITY_LOGO_COUNT = 8;
+
 export default function BrandRibbon() {
   return (
     <section
@@ -58,7 +59,7 @@ Yhteistyömme ulottuu ympäri maailmaa – teemme töitä huolellisesti valittuj
       <div className={styles.carouselWrapperInline}>
         <div className={styles.carousel}>
           <div className={styles.track}>
-            {[...partnerLogos, ...partnerLogos].map((logo, index) => (
+            {marqueeLogos.map((logo, index) => (
               <div className={styles.logoItem} key={`${logo.name}-${index}`}>
                 <Image
                   src={logo.src}
@@ -66,8 +67,9 @@ Yhteistyömme ulottuu ympäri maailmaa – teemme töitä huolellisesti valittuj
                   className={styles.logoImage}
                   width={200}
                   height={80}
-                  loading="lazy"
-                  sizes="(max-width: 768px) 33vw, 25vw"
+                  priority={index < PRIORITY_LOGO_COUNT}
+                  quality={65}
+                  sizes="(max-width: 640px) 45vw, (max-width: 1024px) 24vw, 160px"
                 />
               </div>
             ))}

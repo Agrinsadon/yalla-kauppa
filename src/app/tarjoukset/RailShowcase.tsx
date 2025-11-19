@@ -11,7 +11,7 @@ type RailShowcaseProps = {
 
 export default function RailShowcase({ rails }: RailShowcaseProps) {
   const [activeRail, setActiveRail] = useState('all');
-  const [activeStore, setActiveStore] = useState('all-stores');
+  const [selectedStores, setSelectedStores] = useState<string[]>([]);
 
   const navItems = useMemo(
     () => [
@@ -25,24 +25,39 @@ export default function RailShowcase({ rails }: RailShowcaseProps) {
     const storeSet = new Set<string>();
     rails.forEach((rail) => {
       rail.offers.forEach((offer) => {
-        storeSet.add(offer.location);
+        offer.locations
+          .filter((location) => location && location !== 'Kaikki myymälät')
+          .forEach((location) => storeSet.add(location));
       });
     });
-    return Array.from(storeSet).map((store) => ({
-      id: store,
-      label: store.replace('Yalla Kauppa ', ''),
-    }));
+    return Array.from(storeSet)
+      .sort((a, b) => a.localeCompare(b, 'fi'))
+      .map((store) => ({
+        id: store,
+        label: store.replace('Yalla Kauppa ', '').replace('Yalla ', ''),
+      }));
   }, [rails]);
 
+  const toggleStore = (storeId: string) => {
+    setSelectedStores((prev) =>
+      prev.includes(storeId) ? prev.filter((id) => id !== storeId) : [...prev, storeId],
+    );
+  };
+
   const filteredRails = useMemo(() => {
-    if (activeStore === 'all-stores') return rails;
+    if (selectedStores.length === 0) return rails;
     return rails
       .map((rail) => ({
         ...rail,
-        offers: rail.offers.filter((offer) => offer.location === activeStore),
+        offers: rail.offers.filter((offer) => {
+          if (offer.locations.includes('Kaikki myymälät')) {
+            return true;
+          }
+          return selectedStores.some((store) => offer.locations.includes(store));
+        }),
       }))
       .filter((rail) => rail.offers.length > 0);
-  }, [activeStore, rails]);
+  }, [rails, selectedStores]);
 
   const visibleRails =
     activeRail === 'all'
@@ -59,27 +74,26 @@ export default function RailShowcase({ rails }: RailShowcaseProps) {
       <nav className={styles.storeNav} aria-label="Myymäläsuodatin">
         <button
           type="button"
-          className={`${styles.storeLink} ${
-            activeStore === 'all-stores' ? styles.storeLinkActive : ''
-          }`}
-          onClick={() => setActiveStore('all-stores')}
-          aria-pressed={activeStore === 'all-stores'}
+          className={`${styles.storeLink} ${selectedStores.length === 0 ? styles.storeLinkActive : ''}`}
+          onClick={() => setSelectedStores([])}
+          aria-pressed={selectedStores.length === 0}
         >
           Kaikki myymälät
         </button>
-        {storeItems.map((store) => (
-          <button
-            key={store.id}
-            type="button"
-            className={`${styles.storeLink} ${
-              activeStore === store.id ? styles.storeLinkActive : ''
-            }`}
-            onClick={() => setActiveStore(store.id)}
-            aria-pressed={activeStore === store.id}
-          >
-            {store.label}
-          </button>
-        ))}
+        {storeItems.map((store) => {
+          const isActive = selectedStores.includes(store.id);
+          return (
+            <button
+              key={store.id}
+              type="button"
+              className={`${styles.storeLink} ${isActive ? styles.storeLinkActive : ''}`}
+              onClick={() => toggleStore(store.id)}
+              aria-pressed={isActive}
+            >
+              {store.label}
+            </button>
+          );
+        })}
       </nav>
 
       <nav id="tarjouskategoriat" className={styles.categoryNav} aria-label="Tarjouskategoriat">
