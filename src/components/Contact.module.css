@@ -77,11 +77,9 @@
   flex: 1 1 420px;
   background-color: #ffffff;
   border-radius: 20px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e30613;
   padding: 2.75rem;
-  box-shadow: 0 32px 48px rgba(15, 23, 42, 0.08);
 }
-
 
 .form {
   display: flex;

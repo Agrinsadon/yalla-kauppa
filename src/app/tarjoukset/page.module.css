@@ -85,7 +85,6 @@
 .storeNav {
   display: flex;
   gap: 0.75rem;
-  flex-wrap: wrap;
   align-items: center;
   border-bottom: 1px solid #f1f5f9;
   padding-bottom: 0.35rem;
@@ -225,7 +224,7 @@
   flex-direction: column;
   height: auto;
   border-radius: 20px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid #e30613;
   background: #ffffff;
   overflow: hidden;
   scroll-snap-align: start;
@@ -259,11 +258,11 @@
 
 .locationChip {
   flex: 0 0 auto;
-  padding: 0.6rem 1.15rem;
+  padding: 0.6rem 1rem;
   border-radius: 14px;
   background: rgba(227, 6, 19, 0.08);
   color: #b91c1c;
-  font-size: 0.83rem;
+  font-size: 0.7rem;
   font-weight: 600;
   line-height: 1.3;
   border: 1px solid rgba(227, 6, 19, 0.15);
@@ -340,26 +339,6 @@
   background: #f9fafb;
 }
 
-@media (max-width: 1100px) {
-  .railCarousel {
-    grid-auto-columns: minmax(260px, 320px);
-  }
-}
-
-@media (max-width: 900px) {
-  .page {
-    padding: 0 1.5rem 4rem;
-  }
-
-  .hero {
-    padding: 2.5rem;
-  }
-
-  .heroHighlights {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 640px) {
   .page {
   padding: 0 0rem 0rem;
@@ -412,44 +391,26 @@
 .categoryShowcase {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .storeNav {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid #f1f5f9;
-  padding-bottom: 0.35rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.storeNav::-webkit-scrollbar {
-  display: none;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .storeLink {
-  background: none;
-  border: none;
-  padding: 0 0 0.35rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #6b7280;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  width: 500px;
 }
 
 .storeLink:hover {
-  color: #e30613;
+  color: none;
 }
 
 .storeLink:focus-visible {
   outline: none;
-  color: #e30613;
-  border-bottom-color: rgba(227, 6, 19, 0.6);
+  color: none;
+  border-bottom-color: none;
 }
 
 .storeLinkActive {
@@ -458,14 +419,8 @@
 }
 
 .categoryNav {
-  display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 0.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
+  padding-left: 1rem;
+  padding-right: 1rem
 }
 
 .categoryNav::-webkit-scrollbar {
@@ -473,25 +428,17 @@
 }
 
 .categoryLink {
-  background: none;
-  border: none;
-  padding: 0 0 0.35rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #111111;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  font-size: 0.85rem;
 }
 
 .categoryLink:hover {
-  color: #e30613;
+  color: none;
 }
 
 .categoryLink:focus-visible {
   outline: none;
-  color: #e30613;
-  border-bottom-color: rgba(227, 6, 19, 0.6);
+  color: none;
+  border-bottom-color: none;
 }
 
 .categoryLinkActive {
@@ -500,14 +447,13 @@
 }
 
 .railSection {
-  margin-top: 2rem;
-  padding: 2.5rem;
-  border-radius: 28px;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  border-radius: 20px;
   background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  border: 1px solid #e30613;
 }
 
 .railHeader {

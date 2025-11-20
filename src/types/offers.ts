@@ -30,6 +30,7 @@ export type WeeklyOffer = {
   title: string;
   description?: string;
   location: string;
+  locations?: string[];
   imageSrc?: string;
   imageAlt?: string;
   imageGallery?: OfferImage[];

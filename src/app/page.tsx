@@ -38,6 +38,7 @@ export default async function Home() {
     title: o.product,
     description: o.description,
     location: o.location,
+    locations: o.locations,
     imageSrc: o.imageSrc,
     imageAlt: o.imageAlt,
     imageGallery: undefined,
