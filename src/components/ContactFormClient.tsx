@@ -36,7 +36,7 @@ export default function ContactFormClient({ action }: ContactFormClientProps) {
   }, [state.success]);
 
   return (
-    <form ref={formRef} className={styles.form} action={formAction} encType="multipart/form-data">
+    <form ref={formRef} className={styles.form} action={formAction}>
       <div className={styles.field}>
         <label htmlFor="contact-name" className={styles.label}>
           Nimi*

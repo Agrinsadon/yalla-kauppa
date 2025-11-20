@@ -57,7 +57,9 @@ export async function purgeExpiredOffers() {
   const cutoff = todayIsoDate();
   const { error } = await admin.from('offer_items').delete().lt('ends_at', cutoff);
   if (error) {
-    console.error('Supabase purgeExpiredOffers error', error);
+    const message =
+      (error as { message?: string })?.message || 'Supabase purgeExpiredOffers operation failed';
+    throw new Error(message);
   }
 }
 
