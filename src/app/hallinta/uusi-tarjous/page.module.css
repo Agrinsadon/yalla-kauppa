@@ -59,6 +59,10 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.input[type="date"] {
+  color: #111827;
+}
+
 .input:focus,
 .textarea:focus,
 .select:focus {

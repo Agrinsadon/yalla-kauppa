@@ -19,6 +19,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
   const [state, formAction] = useActionState(action, initialState);
   const [imageMode, setImageMode] = useState<'upload' | 'url'>('upload');
   const noCategories = rails.length === 0;
+  const [originalPriceValue, setOriginalPriceValue] = useState<string>('');
   const [priceValue, setPriceValue] = useState<string>('');
   const [badgeValue, setBadgeValue] = useState<string>('');
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
@@ -28,6 +29,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
     if (state.success) {
       formRef.current?.reset();
       setImageMode('upload');
+      setOriginalPriceValue('');
       setPriceValue('');
       setBadgeValue('');
       setSelectedStores([]);
@@ -55,15 +57,30 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
       ? `${styles.checkboxPill} ${styles.checkboxPillActive}`
       : styles.checkboxPill;
 
-  const computeBadgeFromPrice = (price: number): string => {
-    if (Number.isNaN(price) || price <= 0) return '';
-    let percent = 5;
-    if (price < 5) percent = 5;
-    else if (price < 10) percent = 10;
-    else if (price < 20) percent = 15;
-    else if (price < 50) percent = 20;
-    else percent = 25;
-    return `-${percent}%`;
+  const parsePriceInput = (value: string) => {
+    if (!value) return Number.NaN;
+    const normalized = value.replace(',', '.');
+    const parsed = Number.parseFloat(normalized);
+    return Number.isFinite(parsed) ? parsed : Number.NaN;
+  };
+
+  const computeBadgeFromPrices = (salePrice: number, originalPrice: number): string => {
+    if (
+      !Number.isFinite(salePrice) ||
+      !Number.isFinite(originalPrice) ||
+      originalPrice <= 0 ||
+      salePrice >= originalPrice
+    ) {
+      return '';
+    }
+    const percent = Math.round((1 - salePrice / originalPrice) * 100);
+    return percent > 0 ? `-${percent}%` : '';
+  };
+
+  const updateBadge = (saleInput: string, originalInput: string) => {
+    const sale = parsePriceInput(saleInput);
+    const original = parsePriceInput(originalInput);
+    setBadgeValue(computeBadgeFromPrices(sale, original));
   };
 
   return (
@@ -189,7 +206,20 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
           <label htmlFor="originalPrice" className={styles.label}>
             Normaalihinta
           </label>
-          <input id="originalPrice" name="originalPrice" className={styles.input} required />
+          <input
+            id="originalPrice"
+            name="originalPrice"
+            className={styles.input}
+            value={originalPriceValue}
+            onChange={(e) => {
+              const v = e.target.value;
+              setOriginalPriceValue(v);
+              updateBadge(priceValue, v);
+            }}
+            inputMode="decimal"
+            placeholder="0,00"
+            required
+          />
         </div>
         <div className={styles.fieldGroup}>
           <label htmlFor="price" className={styles.label}>
@@ -206,8 +236,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
             onChange={(e) => {
               const v = e.target.value;
               setPriceValue(v);
-              const num = parseFloat(v.replace(',', '.'));
-              setBadgeValue(computeBadgeFromPrice(num));
+              updateBadge(v, originalPriceValue);
             }}
             required
           />
