@@ -304,13 +304,19 @@
   }
 }
 
-@media (max-width: 768px) {
   .imageGrid {
     flex-direction: column;
   }
-}
 
 @media (max-width: 640px) {
+  .imageGrid {
+    flex-direction: column;
+  }
+
+  .section {
+  position: relative;
+  padding: 1rem 0;
+}
   .inner {
     padding: 0 1.25rem;
   }

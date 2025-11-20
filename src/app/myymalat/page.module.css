@@ -54,6 +54,7 @@
 @media (max-width: 768px) {
   .hero {
     padding: 3rem 1.5rem;
+    padding-top: 110px;
   }
 
   .title {

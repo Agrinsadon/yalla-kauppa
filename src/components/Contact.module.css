@@ -242,8 +242,8 @@
 .contactSection {
   background-color: #ffffff;
   padding: 5rem 0.9rem;
-  padding-top: 0rem;
-  scroll-margin-top: 90px;
+  padding-top: 1rem;
+  scroll-margin-top: 70px;
 }
 
 .wrapper {

@@ -224,7 +224,7 @@
   flex-direction: column;
   height: auto;
   border-radius: 20px;
-  border: 1px solid #e30613;
+  border: 1px solid #111111;
   background: #ffffff;
   overflow: hidden;
   scroll-snap-align: start;
@@ -453,7 +453,6 @@
   margin-right: 0.25rem;
   border-radius: 20px;
   background: #ffffff;
-  border: 1px solid #e30613;
 }
 
 .railHeader {
@@ -504,7 +503,6 @@
   flex-direction: column;
   height: auto;
   border-radius: 20px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
   background: #ffffff;
   overflow: hidden;
   scroll-snap-align: start;
