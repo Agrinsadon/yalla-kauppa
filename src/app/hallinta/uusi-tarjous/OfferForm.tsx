@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { OfferRail } from '@/types/offers';
 import type { ActionState } from './actionTypes';
+import { MAX_IMAGE_SIZE_MB } from './constants';
 import styles from './page.module.css';
 import { stores } from '@/data/stores';
 
@@ -167,7 +168,7 @@ export default function OfferForm({ rails, action }: OfferFormProps) {
       {imageMode === 'upload' ? (
         <div className={styles.fieldGroup}>
           <label htmlFor="imageFile" className={styles.label}>
-            Kuva (JPEG, PNG, max 1.5 Mt)
+            Kuva (JPEG, PNG, max {MAX_IMAGE_SIZE_MB} Mt)
           </label>
           <input
             id="imageFile"

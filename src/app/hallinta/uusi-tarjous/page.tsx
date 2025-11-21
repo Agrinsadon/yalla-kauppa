@@ -11,6 +11,7 @@ import CategoryForm from './CategoryForm';
 import ManageOffers from './ManageOffers';
 import type { ActionState } from './actionTypes';
 import styles from './page.module.css';
+import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB } from './constants';
 
 export const metadata: Metadata = {
   title: 'Lisää tarjous - Yalla Kauppa',
@@ -173,8 +174,8 @@ const createOfferAction = async (_state: ActionState, formData: FormData): Promi
     if (!(imageFile instanceof File) || imageFile.size === 0) {
       return { success: false, message: 'Valitse kuvatiedosto' };
     }
-    if (imageFile.size > 1.5 * 1024 * 1024) {
-      return { success: false, message: 'Kuvan maksimikoko on 1.5 Mt' };
+    if (imageFile.size > MAX_IMAGE_SIZE_BYTES) {
+      return { success: false, message: `Kuvan maksimikoko on ${MAX_IMAGE_SIZE_MB} Mt` };
     }
     const mime = imageFile.type || 'image/jpeg';
     const buffer = Buffer.from(await imageFile.arrayBuffer());
